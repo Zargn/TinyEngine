@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using GLFW;
 using static OpenGL.Gl;
 
@@ -8,6 +9,7 @@ namespace SharpEngine
     {
         static void Main(string[] args)
         {
+            // TODO: Check why this part is needed. The code still works with everything below commented out.
             Glfw.Init();
             Glfw.WindowHint(Hint.ClientApi, ClientApi.OpenGL);
             Glfw.WindowHint(Hint.ContextVersionMajor, 3);
@@ -47,6 +49,7 @@ namespace SharpEngine
                 glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), null);
             };
             glEnableVertexAttribArray(0);
+
 
             // Close the window if the X button is clicked.
             while (!Glfw.WindowShouldClose(window))

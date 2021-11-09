@@ -39,9 +39,48 @@ namespace SharpEngine
                 glDrawArrays(GL_TRIANGLES, 0, 3);
                 glFlush();
 
-                vertices[4] += 0.001f;
+                // MoveRight();
+                // MoveDown();
+                Shrink();
+                
                 UpdateTriangleBuffer();
             }
+        }
+
+        static void MoveRight()
+        {
+            vertices[0] += 0.001f;
+            vertices[3] += 0.001f;
+            vertices[6] += 0.001f;
+        }
+
+        static void MoveDown()
+        {
+            vertices[1] -= 0.001f;
+            vertices[4] -= 0.001f;
+            vertices[7] -= 0.001f;
+        }
+
+        static void Shrink()
+        {
+            // foreach (float vertice in vertices)
+            // {
+            //     if (vertice != 0)
+            //     {
+            //         vertice -= 0.001f;
+            //     }
+            // }
+
+            for (int iteration = 0; iteration < vertices.Length; iteration++)
+            {
+                if (vertices[iteration] != 0)
+                    vertices[iteration] *= 0.99f;
+            }
+        }
+
+        static void Grow()
+        {
+            
         }
 
         private static unsafe void LoadTriangleIntoBuffer()
@@ -70,10 +109,12 @@ namespace SharpEngine
 
         private static void CreateShaderProgram()
         {
+            // Create vertex shader
             var vertexShader = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vertexShader, File.ReadAllText("Shaders/red-triangle.vert"));
             glCompileShader(vertexShader);
 
+            // Create fragment shader
             var fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
             glShaderSource(fragmentShader, File.ReadAllText("Shaders/red-triangle.frag"));
             glCompileShader(fragmentShader);

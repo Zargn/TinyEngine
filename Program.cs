@@ -7,6 +7,16 @@ namespace SharpEngine
 {
     class Program
     {
+        static float[] vertices = new[]
+        {
+            // Vertex 1
+            -.5f, -.5f, 0f,
+            // Vertex 2
+            .5f, -.5f, 0f,
+            // Vertex 3
+            0f, .5f, 0f
+        };
+        
         static void Main(string[] args)
         {
             var window = CreateWindow();
@@ -21,38 +31,39 @@ namespace SharpEngine
                 // Make window interactable and make it interact with the OS.
                 Glfw.PollEvents();
                 
+                // Set clear color
+s
+                
                 // Draw the array:
                 glDrawArrays(GL_TRIANGLES, 0, 3);
                 glFlush();
+
+                vertices[4] += 0.001f;
+                UpdateTriangleBuffer();
             }
         }
 
         private static unsafe void LoadTriangleIntoBuffer()
         {
-            // Corner positions for triangle.
-            float[] vertices = new[]
-            {
-                -.5f, -.5f, 0f,
-                .5f, -.5f, 0f,
-                0f, .5f, 0f
-            };
-
             var vertexArray = glGenVertexArray();
             var vertexBuffer = glGenBuffer();
             glBindVertexArray(vertexArray);
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-            unsafe
-            {
-                // Create a pointer.
-                fixed (float* vertex = &vertices[0])
-                {
-                    // Will put the data in the buffer.
-                    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
-                }
+            
+            UpdateTriangleBuffer();
+ 
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), null);
 
-                glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), null);
-            }
             glEnableVertexAttribArray(0);
+        }
+
+        static unsafe void UpdateTriangleBuffer()
+        {
+            fixed (float* vertex = &vertices[0])
+            {
+                // Will put the data in the buffer.
+                glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
+            }
         }
 
 

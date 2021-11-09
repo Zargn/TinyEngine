@@ -1,4 +1,5 @@
 ﻿using System;
+using GLFW;
 
 namespace SharpEngine
 {
@@ -6,7 +7,15 @@ namespace SharpEngine
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            using (var window = new NativeWindow(800, 600, "MyWindowTitle"))
+            {
+                while (!window.IsClosing)
+                {
+                    window.SwapBuffers();
+                
+                    Glfw.PollEvents();
+                }
+            }
         }
     }
 }

@@ -32,7 +32,8 @@ namespace SharpEngine
                 Glfw.PollEvents();
                 
                 // Set clear color
-s
+                // glClearColor(0, 0, 0, 1);
+                // glClear(GL_COLOR_BUFFER_BIT);
                 
                 // Draw the array:
                 glDrawArrays(GL_TRIANGLES, 0, 3);

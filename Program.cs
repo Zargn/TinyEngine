@@ -41,7 +41,8 @@ namespace SharpEngine
 
                 // MoveRight();
                 // MoveDown();
-                Shrink();
+                // Shrink();
+                Grow();
                 
                 UpdateTriangleBuffer();
             }
@@ -63,24 +64,20 @@ namespace SharpEngine
 
         static void Shrink()
         {
-            // foreach (float vertice in vertices)
-            // {
-            //     if (vertice != 0)
-            //     {
-            //         vertice -= 0.001f;
-            //     }
-            // }
-
             for (int iteration = 0; iteration < vertices.Length; iteration++)
             {
                 if (vertices[iteration] != 0)
-                    vertices[iteration] *= 0.99f;
+                    vertices[iteration] *= 0.999f;
             }
         }
 
         static void Grow()
         {
-            
+            for (int iteration = 0; iteration < vertices.Length; iteration++)
+            {
+                if (vertices[iteration] != 0)
+                    vertices[iteration] *= 1.001f;
+            }
         }
 
         private static unsafe void LoadTriangleIntoBuffer()

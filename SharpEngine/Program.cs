@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Intrinsics.X86;
 using GLFW;
 using static OpenGL.Gl;
 
@@ -86,27 +87,40 @@ namespace SharpEngine
             0f, .5f, 0f
         };
     }
+
+
+    struct Vector {
+        public float x, y, z;
+
+        public Vector(float x, float y, float z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public Vector(float x, float y)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = 0;
+        }
+    }
     
     
     class Program
     {
-        static float[] vertices = new[]
+        static Vector[] vertices = new[]
         {
-            // Vertex 1
-            -.1f, -.1f, 0f,
-            // Vertex 2
-            .1f, -.1f, 0f,
-            // Vertex 3
-            0f, .1f, 0f, 
-            // Vertex 1
-            .4f, .4f, 0f,
-            // Vertex 2
-            .6f, .4f, 0f,
-            // Vertex 3
-            .5f, .6f, 0f
+            new Vector(-.1f, -.1f),
+            new Vector(.1f, -.1f),
+            new Vector(0f,.1f),
+            new Vector(.4f, .4f),
+            new Vector(.6f, .4f),
+            new Vector(.5f,.6f)
         };
 
-        static unsafe void Main(string[] args)
+        static void Main(string[] args)
         {
             var window = CreateWindow();
 
@@ -114,20 +128,6 @@ namespace SharpEngine
             
             LoadTriangleIntoBuffer();
 
-            # region ClassBased
-            // var vertexArray = glGenVertexArray();
-            // var vertexBuffer = glGenBuffer();
-            // glBindVertexArray(vertexArray);
-            // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-            //
-            //
-            // List<Triangle> triangles = new List<Triangle>();
-            // triangles.Add(new Triangle(0, 0, 0));
-            // triangles.Add(new Triangle(-.3f, 0, 0));
-            // triangles.Add(new Triangle(.3f, 0, 0));
-            // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffer);
-            # endregion
-            
             CreateShaderProgram();
             
             // Render loop close the window if the X button is clicked.
@@ -138,35 +138,24 @@ namespace SharpEngine
                 
                 ClearScreen();
 
-                
-                
-                glDrawArrays(GL_TRIANGLES, 0, vertices.Length / vertexSize);
-                
-                
-                // TODO: CLASSBASED
-                // glDrawArrays(GL_TRIANGLES, 0, Triangle.NumberOfTriangles*3);
-                
-                
-                glFlush();
+                Render(window);
 
                 // scaleY();
-                // MoveRight();
+                MoveRight();
                 // MoveDown();
                 // Shrink();
                 // Grow();
                 
                 UpdateTriangleBuffer();
-                
-                # region ClassBased
-                // foreach (var triangle in triangles)
-                // {
-                //     triangle.AddToPipeline();
-                // }
-                // Triangle.Render();
-                # endregion
             }
         }
 
+        private static void Render(Window window)
+        {
+            glDrawArrays(GL_TRIANGLES, 0, vertices.Length);
+            Glfw.SwapBuffers(window);
+        }
+        
         private static void ClearScreen()
         {
             // Set clear color
@@ -182,45 +171,45 @@ namespace SharpEngine
         private const int vertexY = 1;
         private const int vertexZ = 2;
 
-        static void scaleY()
-        {
-            for (int iteration = vertexY; iteration < vertices.Length; iteration += vertexSize)
-            {
-                vertices[iteration] *= 0.0001f;
-            }
-        }
-        
+        // static void scaleY()
+        // {
+        //     for (int iteration = vertexY; iteration < vertices.Length; iteration += vertexSize)
+        //     {
+        //         vertices[iteration] *= 0.0001f;
+        //     }
+        // }
+        //
         static void MoveRight()
         {
-            for (int iteration = vertexX; iteration < vertices.Length; iteration += vertexSize)
+            for (var i = 0; i < vertices.Length; i++)
             {
-                vertices[iteration] += 0.0001f;
+                vertices[i].x += 0.0001f;
             }
         }
-        
-        static void MoveDown()
-        {
-            for (int iteration = vertexY; iteration < vertices.Length; iteration += vertexSize)
-            {
-                vertices[iteration] -= 0.0001f;
-            }
-        }
-        
-        static void Shrink()
-        {
-            for (int iteration = 0; iteration < vertices.Length; iteration++)
-            {
-                vertices[iteration] *= 0.9999f;
-            }
-        }
-        
-        static void Grow()
-        {
-            for (int iteration = 0; iteration < vertices.Length; iteration++)
-            {
-                vertices[iteration] *= 1.0001f;
-            }
-        }
+        //
+        // static void MoveDown()
+        // {
+        //     for (int iteration = vertexY; iteration < vertices.Length; iteration += vertexSize)
+        //     {
+        //         vertices[iteration] -= 0.0001f;
+        //     }
+        // }
+        //
+        // static void Shrink()
+        // {
+        //     for (int iteration = 0; iteration < vertices.Length; iteration++)
+        //     {
+        //         vertices[iteration] *= 0.9999f;
+        //     }
+        // }
+        //
+        // static void Grow()
+        // {
+        //     for (int iteration = 0; iteration < vertices.Length; iteration++)
+        //     {
+        //         vertices[iteration] *= 1.0001f;
+        //     }
+        // }
         #endregion
 
         private static unsafe void LoadTriangleIntoBuffer()
@@ -239,10 +228,10 @@ namespace SharpEngine
 
         static unsafe void UpdateTriangleBuffer()
         {
-            fixed (float* vertex = &vertices[0])
+            fixed (Vector* vertex = &vertices[0])
             {
                 // Will put the data in the buffer.
-                glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(Vector) * vertices.Length, vertex, GL_STATIC_DRAW);
             }
         }
 

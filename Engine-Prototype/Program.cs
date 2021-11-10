@@ -12,33 +12,19 @@ namespace Engine_Protoype
     {
         public void AddToPipeline()
         {
-            // TODO: Make cleaner! -------------------------------------------------------------------------------------
-            
-            
-            float[] temp = new float[GlobalVertices.Length + vertices.Length];
-            vertices.CopyTo(temp, 0);
-            GlobalVertices.CopyTo(temp, 9);
-            GlobalVertices = new float[temp.Length];
-            temp.CopyTo(GlobalVertices, 0);
-
-            
-            Console.WriteLine("Vertices:");
-            foreach (float f in GlobalVertices)
-            {
-                Console.WriteLine(f);
-            }
+            vertices.CopyTo(globalVertices, 9 * id);
         }
     
         public static int NumberOfTriangles = 0;
         
-        private static float[] GlobalVertices = new float[9];
-    
+        private static float[] globalVertices = new float[9];
+
         public static unsafe void Render()
         {
-            fixed (float* vertex = &GlobalVertices[0])
+            fixed (float* vertex = &globalVertices[0])
             {
                 // Put the updated data in the buffer.
-                glBufferData(GL_ARRAY_BUFFER, sizeof(float) * GlobalVertices.Length, vertex, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(float) * globalVertices.Length, vertex, GL_STATIC_DRAW);
             }
         }
         
@@ -62,6 +48,8 @@ namespace Engine_Protoype
     
             NumberOfTriangles++;
             
+            Array.Resize(ref globalVertices, globalVertices.Length + vertices.Length);
+            
             createTriangle();
         }
     
@@ -70,6 +58,43 @@ namespace Engine_Protoype
             glVertexAttribPointer(id, 3, GL_FLOAT, false, 3 * sizeof(float), null);
     
             glEnableVertexAttribArray(id);
+        }
+
+        public void Rotate(float degrees)
+        {
+            // List<float> temp = new List<float>();
+            // vertices.CopyTo(s
+            // temp = null;
+            
+            // x
+            // vertices[4] = (float) Math.Cos(degrees);
+            // vertices[5] = (float) - Math.Sin(degrees);
+            // vertices[7] = (float) Math.Sin(degrees);
+            // vertices[8] = (float) Math.Cos(degrees);
+
+            // y
+            // vertices[0] = (float) Math.Cos(degrees);
+            // vertices[2] = (float) Math.Sin(degrees);
+            // vertices[6] = (float) - Math.Sin(degrees);
+            // vertices[8] = (float) Math.Cos(degrees);
+
+            // z
+            // vertices[0] += (float) Math.Cos(degrees);
+            // vertices[1] += (float) - Math.Sin(degrees);
+            // vertices[3] += (float) Math.Sin(degrees);
+            // vertices[4] += (float) Math.Cos(degrees);
+            // vertices[8] += 1;
+
+            for (int i = 0; i < vertices.Length; i += 3)
+            {
+                vertices[i] = vertices[i] * (float)Math.Cos(degrees) - vertices[i + 1] * - (float)Math.Sin(degrees);
+                vertices[i + 1] = vertices[i] * (float) Math.Sin(degrees) + vertices[i + 1] * (float) Math.Cos(degrees);
+            }
+            
+            // xf = cx + (int)((float)(px - cx) * cos(theta))
+            //      - ((float)(py - cy) * sin(theta));
+            // yf = cy + (int)((float)(px - cx) * sin(theta))
+            //         + ((float)(py - cy) * cos(theta));
         }
         
         float[] vertices = new[]
@@ -82,11 +107,11 @@ namespace Engine_Protoype
             0f, .1f, 0f
         };
     }
-    
-    
+
+
     class Program
     {
-        static unsafe void Main(string[] args)
+        static void Main(string[] args)
         {
             var window = CreateWindow();
             
@@ -98,11 +123,13 @@ namespace Engine_Protoype
             
             List<Triangle> triangles = new List<Triangle>();
             triangles.Add(new Triangle(0, 0, 0));
-            triangles.Add(new Triangle(-.3f, 0, 0));
-            triangles.Add(new Triangle(.3f, 0, 0));
+            triangles.Add(new Triangle(0, 0, 0));
+            // triangles.Add(new Triangle(-.3f, 0, 0));
+            // triangles.Add(new Triangle(.3f, 0, 0));
 
             CreateShaderProgram();
-            
+
+            float angle = 0;
             // Render loop close the window if the X button is clicked.
             while (!Glfw.WindowShouldClose(window))
             {
@@ -113,13 +140,17 @@ namespace Engine_Protoype
                 
                 glDrawArrays(GL_TRIANGLES, 0, Triangle.NumberOfTriangles*3);
                 
-                
                 glFlush();
                 
                 foreach (var triangle in triangles)
                 {
                     triangle.AddToPipeline();
                 }
+                triangles[0].Rotate(angle);
+
+                angle += 0.001f;
+                if (angle >= 360)
+                    angle = 0;
                 Triangle.Render();
             }
         }

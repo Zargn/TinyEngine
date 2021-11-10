@@ -99,17 +99,7 @@ namespace SharpEngine
             // Vertex 3
             0f, .5f, 0f
         };
-        
-        // static float[] vertices2 = new[]
-        // {
-        //     // Vertex 1
-        //     -.1f, -.1f, 0f,
-        //     // Vertex 2
-        //     .1f, -.1f, 0f,
-        //     // Vertex 3
-        //     0f, .1f, 0f
-        // };
-        
+
         static unsafe void Main(string[] args)
         {
             var window = CreateWindow();
@@ -140,12 +130,12 @@ namespace SharpEngine
                 // Make window interactable and make it interact with the OS.
                 Glfw.PollEvents();
                 
-                // Set clear color
-                glClearColor(0, 0, 0, 1);
-                glClear(GL_COLOR_BUFFER_BIT);
+                ClearScreen();
+
                 
-                // Draw the array:
-                glDrawArrays(GL_TRIANGLES, 0, 3);
+                
+                glDrawArrays(GL_TRIANGLES, 0, vertices.Length / vertexSize);
+                
                 
                 // TODO: CLASSBASED
                 // glDrawArrays(GL_TRIANGLES, 0, Triangle.NumberOfTriangles*3);
@@ -154,8 +144,8 @@ namespace SharpEngine
                 glFlush();
 
                 // MoveRight();
-                // MoveDown();
-                Shrink();
+                MoveDown();
+                // Shrink();
                 // Grow();
                 
                 UpdateTriangleBuffer();
@@ -170,19 +160,35 @@ namespace SharpEngine
             }
         }
 
+        private static void ClearScreen()
+        {
+            // Set clear color
+            glClearColor(0, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+
         # region Movement
+
+        private const int vertexSize = 3;
+
+        private const int vertexX = 0;
+        private const int vertexY = 1;
+        private const int vertexZ = 2;
+        
         static void MoveRight()
         {
-            vertices[0] += 0.001f;
-            vertices[3] += 0.001f;
-            vertices[6] += 0.001f;
+            for (int iteration = vertexX; iteration < vertices.Length; iteration += vertexSize)
+            {
+                vertices[iteration] += 0.0001f;
+            }
         }
         
         static void MoveDown()
         {
-            vertices[1] -= 0.001f;
-            vertices[4] -= 0.001f;
-            vertices[7] -= 0.001f;
+            for (int iteration = vertexY; iteration < vertices.Length; iteration += vertexSize)
+            {
+                vertices[iteration] -= 0.0001f;
+            }
         }
         
         static void Shrink()
@@ -190,7 +196,7 @@ namespace SharpEngine
             for (int iteration = 0; iteration < vertices.Length; iteration++)
             {
                 if (vertices[iteration] != 0)
-                    vertices[iteration] *= 0.999f;
+                    vertices[iteration] *= 0.9999f;
             }
         }
         
@@ -199,7 +205,7 @@ namespace SharpEngine
             for (int iteration = 0; iteration < vertices.Length; iteration++)
             {
                 if (vertices[iteration] != 0)
-                    vertices[iteration] *= 1.001f;
+                    vertices[iteration] *= 1.0001f;
             }
         }
         #endregion
@@ -213,7 +219,7 @@ namespace SharpEngine
             
             UpdateTriangleBuffer();
         
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), null);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, vertexSize * sizeof(float), null);
         
             glEnableVertexAttribArray(0);
         }

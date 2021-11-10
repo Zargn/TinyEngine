@@ -93,11 +93,17 @@ namespace SharpEngine
         static float[] vertices = new[]
         {
             // Vertex 1
-            -.5f, -.5f, 0f,
+            -.1f, -.1f, 0f,
             // Vertex 2
-            .5f, -.5f, 0f,
+            .1f, -.1f, 0f,
             // Vertex 3
-            0f, .5f, 0f
+            0f, .1f, 0f, 
+            // Vertex 1
+            .4f, .4f, 0f,
+            // Vertex 2
+            .6f, .4f, 0f,
+            // Vertex 3
+            .5f, .6f, 0f
         };
 
         static unsafe void Main(string[] args)
@@ -143,8 +149,9 @@ namespace SharpEngine
                 
                 glFlush();
 
+                // scaleY();
                 // MoveRight();
-                MoveDown();
+                // MoveDown();
                 // Shrink();
                 // Grow();
                 
@@ -174,6 +181,14 @@ namespace SharpEngine
         private const int vertexX = 0;
         private const int vertexY = 1;
         private const int vertexZ = 2;
+
+        static void scaleY()
+        {
+            for (int iteration = vertexY; iteration < vertices.Length; iteration += vertexSize)
+            {
+                vertices[iteration] *= 0.0001f;
+            }
+        }
         
         static void MoveRight()
         {
@@ -195,8 +210,7 @@ namespace SharpEngine
         {
             for (int iteration = 0; iteration < vertices.Length; iteration++)
             {
-                if (vertices[iteration] != 0)
-                    vertices[iteration] *= 0.9999f;
+                vertices[iteration] *= 0.9999f;
             }
         }
         
@@ -204,8 +218,7 @@ namespace SharpEngine
         {
             for (int iteration = 0; iteration < vertices.Length; iteration++)
             {
-                if (vertices[iteration] != 0)
-                    vertices[iteration] *= 1.0001f;
+                vertices[iteration] *= 1.0001f;
             }
         }
         #endregion
@@ -238,12 +251,12 @@ namespace SharpEngine
         {
             // Create vertex shader
             var vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, File.ReadAllText("Shaders/red-triangle.vert"));
+            glShaderSource(vertexShader, File.ReadAllText("Shaders/ScreenCoordinate.vert"));
             glCompileShader(vertexShader);
 
             // Create fragment shader
             var fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader, File.ReadAllText("Shaders/red-triangle.frag"));
+            glShaderSource(fragmentShader, File.ReadAllText("Shaders/green.frag"));
             glCompileShader(fragmentShader);
 
             // rendering pipeline - create shader program

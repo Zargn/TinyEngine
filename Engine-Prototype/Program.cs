@@ -8,23 +8,42 @@ using static OpenGL.Gl;
 
 namespace Engine_Protoype
 {
+    struct Vector {
+        public float x, y, z;
+
+        public Vector(float x, float y, float z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public Vector(float x, float y)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = 0;
+        }
+    }
+    
+    
     class Triangle
     {
         public void AddToPipeline()
         {
-            vertices.CopyTo(globalVertices, 9 * id);
+            vertices.CopyTo(globalVertices, 3 * id);
         }
     
         public static int NumberOfTriangles = 0;
         
-        private static float[] globalVertices = new float[9];
+        private static Vector[] globalVertices = new Vector[3];
 
         public static unsafe void Render()
         {
-            fixed (float* vertex = &globalVertices[0])
+            fixed (Vector* vertex = &globalVertices[0])
             {
                 // Put the updated data in the buffer.
-                glBufferData(GL_ARRAY_BUFFER, sizeof(float) * globalVertices.Length, vertex, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(Vector) * globalVertices.Length, vertex, GL_STATIC_DRAW);
             }
         }
         
@@ -33,15 +52,24 @@ namespace Engine_Protoype
         
         public Triangle(float x, float y, float z)
         {
-            vertices[0] += x;
-            vertices[1] += y;
-            vertices[2] += z;
-            vertices[3] += x;
-            vertices[4] += y;
-            vertices[5] += z;
-            vertices[6] += x;
-            vertices[7] += y;
-            vertices[8] += z;
+            vertices[0].x += x;
+            vertices[0].y += y;
+            vertices[0].z += z;
+            vertices[1].x += x;
+            vertices[1].y += y;
+            vertices[1].z += z;
+            vertices[2].x += x;
+            vertices[2].x += y;
+            vertices[2].x += z;
+            // vertices[0] += x;
+            // vertices[1] += y;
+            // vertices[2] += z;
+            // vertices[3] += x;
+            // vertices[4] += y;
+            // vertices[5] += z;
+            // vertices[6] += x;
+            // vertices[7] += y;
+            // vertices[8] += z;
     
             id = nextId;
             nextId++;
@@ -85,11 +113,11 @@ namespace Engine_Protoype
             // vertices[4] += (float) Math.Cos(degrees);
             // vertices[8] += 1;
 
-            for (int i = 0; i < vertices.Length; i += 3)
-            {
-                vertices[i] = vertices[i] * (float)Math.Cos(degrees) - vertices[i + 1] * - (float)Math.Sin(degrees);
-                vertices[i + 1] = vertices[i] * (float) Math.Sin(degrees) + vertices[i + 1] * (float) Math.Cos(degrees);
-            }
+            // for (int i = 0; i < vertices.Length; i += 3)
+            // {
+            //     vertices[i] = vertices[i] * (float)Math.Cos(degrees) - vertices[i + 1] * - (float)Math.Sin(degrees);
+            //     vertices[i + 1] = vertices[i] * (float) Math.Sin(degrees) + vertices[i + 1] * (float) Math.Cos(degrees);
+            // }
             
             // xf = cx + (int)((float)(px - cx) * cos(theta))
             //      - ((float)(py - cy) * sin(theta));
@@ -97,14 +125,17 @@ namespace Engine_Protoype
             //         + ((float)(py - cy) * cos(theta));
         }
         
-        float[] vertices = new[]
+        Vector[] vertices = new[]
         {
-            // Vertex 1
-            -.1f, -.1f, 0f,
-            // Vertex 2
-            .1f, -.1f, 0f,
-            // Vertex 3
-            0f, .1f, 0f
+            new Vector(-.1f,-.1f),
+            new Vector(.1f,-.1f),
+            new Vector(0f,.1f)
+            // // Vertex 1
+            // -.1f, -.1f, 0f,
+            // // Vertex 2
+            // .1f, -.1f, 0f,
+            // // Vertex 3
+            // 0f, .1f, 0f
         };
     }
 
@@ -123,8 +154,8 @@ namespace Engine_Protoype
             
             List<Triangle> triangles = new List<Triangle>();
             triangles.Add(new Triangle(0, 0, 0));
-            triangles.Add(new Triangle(0, 0, 0));
-            // triangles.Add(new Triangle(-.3f, 0, 0));
+            // triangles.Add(new Triangle(0, 0, 0));
+            triangles.Add(new Triangle(-.3f, 0, 0));
             // triangles.Add(new Triangle(.3f, 0, 0));
 
             CreateShaderProgram();

@@ -29,11 +29,11 @@ namespace SharpEngine
                 Console.WriteLine(f);
             }
         }
-
+    
         public static int NumberOfTriangles = 0;
         
         private static float[] GlobalVertices = new float[9];
-
+    
         public static unsafe void Render()
         {
             fixed (float* vertex = &GlobalVertices[0])
@@ -58,21 +58,21 @@ namespace SharpEngine
             vertices[6] += x;
             vertices[7] += y;
             vertices[8] += z;
-
+    
             id = nextId;
             nextId++;
-
+    
             NumberOfTriangles++;
             
             createTriangle();
         }
-
+    
         unsafe void createTriangle()
         {
             // Render();
- 
+    
             glVertexAttribPointer(id, 3, GL_FLOAT, false, 3 * sizeof(float), null);
-
+    
             glEnableVertexAttribArray(id);
         }
         
@@ -90,16 +90,16 @@ namespace SharpEngine
     
     class Program
     {
-        // static float[] vertices = new[]
-        // {
-        //     // Vertex 1
-        //     -.5f, -.5f, 0f,
-        //     // Vertex 2
-        //     .5f, -.5f, 0f,
-        //     // Vertex 3
-        //     0f, .5f, 0f
-        // };
-        //
+        static float[] vertices = new[]
+        {
+            // Vertex 1
+            -.5f, -.5f, 0f,
+            // Vertex 2
+            .5f, -.5f, 0f,
+            // Vertex 3
+            0f, .5f, 0f
+        };
+        
         // static float[] vertices2 = new[]
         // {
         //     // Vertex 1
@@ -114,31 +114,24 @@ namespace SharpEngine
         {
             var window = CreateWindow();
 
-            // LoadTriangleIntoBuffer();
-            //
-            // LoadTriangleIntoBuffer();
-            //
-            // CreateShaderProgram();
+            LoadTriangleIntoBuffer();
             
-            var vertexArray = glGenVertexArray();
-            var vertexBuffer = glGenBuffer();
-            glBindVertexArray(vertexArray);
-            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+            LoadTriangleIntoBuffer();
 
-
-            List<Triangle> triangles = new List<Triangle>();
-            triangles.Add(new Triangle(0, 0, 0));
-            triangles.Add(new Triangle(-.3f, 0, 0));
-            triangles.Add(new Triangle(.3f, 0, 0));
-            
+            # region ClassBased
+            // var vertexArray = glGenVertexArray();
+            // var vertexBuffer = glGenBuffer();
+            // glBindVertexArray(vertexArray);
+            // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+            //
+            //
+            // List<Triangle> triangles = new List<Triangle>();
+            // triangles.Add(new Triangle(0, 0, 0));
+            // triangles.Add(new Triangle(-.3f, 0, 0));
+            // triangles.Add(new Triangle(.3f, 0, 0));
             // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffer);
-
-            // Triangle triangle = new Triangle(0, 0, 0);
-            //
-            // Triangle triangle2 = new Triangle(-0.3f, 0, 0);
-            //
-            // Triangle triangle3 = new Triangle(.3f, 0, 0);
-
+            # endregion
+            
             CreateShaderProgram();
             
             // Render loop close the window if the X button is clicked.
@@ -152,91 +145,87 @@ namespace SharpEngine
                 glClear(GL_COLOR_BUFFER_BIT);
                 
                 // Draw the array:
-                // glDrawArrays(GL_TRIANGLES, 0, 3);
-                glDrawArrays(GL_TRIANGLES, 0, Triangle.NumberOfTriangles*3);
+                glDrawArrays(GL_TRIANGLES, 0, 3);
+                
+                // TODO: CLASSBASED
+                // glDrawArrays(GL_TRIANGLES, 0, Triangle.NumberOfTriangles*3);
+                
+                
                 glFlush();
 
                 // MoveRight();
                 // MoveDown();
-                // Shrink();
+                Shrink();
                 // Grow();
                 
-                // UpdateTriangleBuffer();
-                foreach (var triangle in triangles)
-                {
-                    triangle.AddToPipeline();
-                }
+                UpdateTriangleBuffer();
                 
-                
-                // triangle.AddToPipeline();
-                // triangle2.AddToPipeline();
-                // triangle3.AddToPipeline();
-                Triangle.Render();
+                # region ClassBased
+                // foreach (var triangle in triangles)
+                // {
+                //     triangle.AddToPipeline();
+                // }
+                // Triangle.Render();
+                # endregion
             }
         }
 
         # region Movement
-        // static void MoveRight()
-        // {
-        //     vertices[0] += 0.001f;
-        //     vertices[3] += 0.001f;
-        //     vertices[6] += 0.001f;
-        // }
-        //
-        // static void MoveDown()
-        // {
-        //     vertices[1] -= 0.001f;
-        //     vertices[4] -= 0.001f;
-        //     vertices[7] -= 0.001f;
-        // }
-        //
-        // static void Shrink()
-        // {
-        //     for (int iteration = 0; iteration < vertices.Length; iteration++)
-        //     {
-        //         if (vertices[iteration] != 0)
-        //             vertices[iteration] *= 0.999f;
-        //     }
-        // }
-        //
-        // static void Grow()
-        // {
-        //     for (int iteration = 0; iteration < vertices.Length; iteration++)
-        //     {
-        //         if (vertices[iteration] != 0)
-        //             vertices[iteration] *= 1.001f;
-        //     }
-        // }
+        static void MoveRight()
+        {
+            vertices[0] += 0.001f;
+            vertices[3] += 0.001f;
+            vertices[6] += 0.001f;
+        }
+        
+        static void MoveDown()
+        {
+            vertices[1] -= 0.001f;
+            vertices[4] -= 0.001f;
+            vertices[7] -= 0.001f;
+        }
+        
+        static void Shrink()
+        {
+            for (int iteration = 0; iteration < vertices.Length; iteration++)
+            {
+                if (vertices[iteration] != 0)
+                    vertices[iteration] *= 0.999f;
+            }
+        }
+        
+        static void Grow()
+        {
+            for (int iteration = 0; iteration < vertices.Length; iteration++)
+            {
+                if (vertices[iteration] != 0)
+                    vertices[iteration] *= 1.001f;
+            }
+        }
         #endregion
 
-        // private static unsafe void LoadTriangleIntoBuffer()
-        // {
-        //     var vertexArray = glGenVertexArray();
-        //     var vertexBuffer = glGenBuffer();
-        //     glBindVertexArray(vertexArray);
-        //     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        //     
-        //     UpdateTriangleBuffer();
-        //
-        //     glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), null);
-        //
-        //     glEnableVertexAttribArray(0);
-        // }
+        private static unsafe void LoadTriangleIntoBuffer()
+        {
+            var vertexArray = glGenVertexArray();
+            var vertexBuffer = glGenBuffer();
+            glBindVertexArray(vertexArray);
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+            
+            UpdateTriangleBuffer();
+        
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), null);
+        
+            glEnableVertexAttribArray(0);
+        }
 
-        // static unsafe void UpdateTriangleBuffer()
-        // {
-        //     fixed (float* vertex = &vertices[0])
-        //     {
-        //         // Will put the data in the buffer.
-        //         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
-        //     }
-        //     
-        //     fixed (float* vertex = &vertices2[0])
-        //     {
-        //         // Will put the data in the buffer.
-        //         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices2.Length, vertex, GL_STATIC_DRAW);
-        //     }
-        // }
+        static unsafe void UpdateTriangleBuffer()
+        {
+            fixed (float* vertex = &vertices[0])
+            {
+                // Will put the data in the buffer.
+                glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
+            }
+        }
 
 
         private static void CreateShaderProgram()

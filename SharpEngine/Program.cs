@@ -231,7 +231,7 @@ namespace SharpEngine
             fixed (Vector* vertex = &vertices[0])
             {
                 // Will put the data in the buffer.
-                glBufferData(GL_ARRAY_BUFFER, sizeof(Vector) * vertices.Length, vertex, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(Vector) * vertices.Length, vertex, GL_DYNAMIC_DRAW);
             }
         }
 

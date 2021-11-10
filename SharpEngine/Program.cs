@@ -149,6 +149,8 @@ namespace SharpEngine
             LoadTriangleIntoBuffer();
 
             CreateShaderProgram();
+
+            float movement = .0001f;
             
             // Render loop close the window if the X button is clicked.
             while (!Glfw.WindowShouldClose(window))
@@ -169,7 +171,19 @@ namespace SharpEngine
                 for (var i = 0; i < vertices.Length; i++)
                 {
                     // vertices[i] *= 1.0001f;
-                    vertices[i] += new Vector(.0001f, .0001f, 0);
+                    vertices[i] += new Vector(movement, 0, 0);
+                }
+                foreach (Vector v in vertices)
+                {
+                    if (v.x >= 1 || v.y >= 1 || v.z >= 1)
+                    {
+                        movement *= -1;
+                    }
+
+                    if (v.x <= -1 || v.y <= -1 || v.z <= -1)
+                    {
+                        movement *= -1;
+                    }
                 }
                 
                 UpdateTriangleBuffer();

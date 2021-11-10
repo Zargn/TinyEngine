@@ -171,7 +171,7 @@ namespace SharpEngine
                 for (var i = 0; i < vertices.Length; i++)
                 {
                     // vertices[i] *= 1.0001f;
-                    vertices[i] += new Vector(movement, 0, 0);
+                    vertices[i] += new Vector(0, movement, 0);
                 }
                 foreach (Vector v in vertices)
                 {

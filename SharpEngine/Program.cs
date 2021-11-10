@@ -105,6 +105,26 @@ namespace SharpEngine
             this.y = y;
             this.z = 0;
         }
+
+        public static Vector operator *(Vector v, float f)
+        {
+            return new Vector(v.x * f, v.y * f, v.z * f);
+        }
+
+        public static Vector operator +(Vector v, Vector v2)
+        {
+            return new Vector(v.x + v2.x, v.y + v2.y, v.z + v2.z);
+        }
+        
+        public static Vector operator -(Vector v, Vector v2)
+        {
+            return new Vector(v.x - v2.x, v.y - v2.y, v.z - v2.z);
+        }
+
+        public static Vector operator /(Vector v, float f)
+        {
+            return new Vector(v.x / f, v.y / f, v.z / f);
+        }
     }
     
     
@@ -141,10 +161,16 @@ namespace SharpEngine
                 Render(window);
 
                 // scaleY();
-                MoveRight();
+                // MoveRight();
                 // MoveDown();
                 // Shrink();
                 // Grow();
+                
+                for (var i = 0; i < vertices.Length; i++)
+                {
+                    // vertices[i] *= 1.0001f;
+                    vertices[i] += new Vector(.0001f, .0001f, 0);
+                }
                 
                 UpdateTriangleBuffer();
             }

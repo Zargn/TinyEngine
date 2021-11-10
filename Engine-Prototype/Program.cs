@@ -52,25 +52,14 @@ namespace Engine_Protoype
         
         public Triangle(float x, float y, float z)
         {
-            vertices[0].x += x;
-            vertices[0].y += y;
-            vertices[0].z += z;
-            vertices[1].x += x;
-            vertices[1].y += y;
-            vertices[1].z += z;
-            vertices[2].x += x;
-            vertices[2].x += y;
-            vertices[2].x += z;
-            // vertices[0] += x;
-            // vertices[1] += y;
-            // vertices[2] += z;
-            // vertices[3] += x;
-            // vertices[4] += y;
-            // vertices[5] += z;
-            // vertices[6] += x;
-            // vertices[7] += y;
-            // vertices[8] += z;
-    
+            // Put the center of the triangle at the desired offset.
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i].x += x;
+                vertices[i].y += y;
+                vertices[i].z += z;
+            }
+
             id = nextId;
             nextId++;
     
@@ -130,12 +119,6 @@ namespace Engine_Protoype
             new Vector(-.1f,-.1f),
             new Vector(.1f,-.1f),
             new Vector(0f,.1f)
-            // // Vertex 1
-            // -.1f, -.1f, 0f,
-            // // Vertex 2
-            // .1f, -.1f, 0f,
-            // // Vertex 3
-            // 0f, .1f, 0f
         };
     }
 

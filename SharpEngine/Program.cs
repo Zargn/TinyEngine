@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
 using GLFW;
 using static OpenGL.Gl;
@@ -88,7 +89,13 @@ namespace SharpEngine
     //     };
     // }
 
-
+    public class Triangle
+    {
+        
+    }
+    
+    
+    
     class Program
     {
         // static Vector[] vertices = new[]
@@ -103,13 +110,13 @@ namespace SharpEngine
         
         static Vertex[] vertices = new Vertex[]
         {
-            new Vertex(new Vector(-.1f, -.1f), Color.Red),
-            new Vertex(new Vector(.1f, -.1f), Color.Green),
+            new Vertex(new Vector(-.1f, -.1f), new Color(0,1,1,1)),
+            new Vertex(new Vector(.1f, -.1f), new Color(1,1,0,1)),
             new Vertex(new Vector(0f, .1f), Color.Blue),
             
-            new Vertex(new Vector(0f, 0f), Color.Red),
-            new Vertex(new Vector(1f, 0f), Color.Green),
-            new Vertex(new Vector(0f, 1f), Color.Blue)
+            // new Vertex(new Vector(0f, 0.4f), Color.Red),
+            // new Vertex(new Vector(0.1f, 0.4f), Color.Green),
+            // new Vertex(new Vector(0f, 0.5f), Color.Blue)
         };
 
         private static Vector centerPoint = new Vector(0, 0);
@@ -143,12 +150,22 @@ namespace SharpEngine
             }
 
             Vector newcenterPoint = (max + min) / 2;
-
-            Console.WriteLine(newcenterPoint.x);
-            Console.WriteLine(newcenterPoint.y);
-            Console.WriteLine(newcenterPoint.z);
-
             centerPoint = newcenterPoint;
+            
+             min = vertices[0].position;
+             max = vertices[0].position;
+            for (int i = 3; i < vertices.Length; i++)
+            {
+                min = Vector.Min(min, vertices[i].position);
+                max = Vector.Max(max, vertices[i].position);
+            }
+
+            newcenterPoint = (max + min) / 2;
+
+            centerPoint2 = newcenterPoint;
+            
+            
+            
             
             float scale = 1;
             float scaleMultiplier = 0.999f;
@@ -344,9 +361,9 @@ namespace SharpEngine
             
             UpdateTriangleBuffer();
 
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), null);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
             
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (void*)sizeof(Vector));
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
         
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);

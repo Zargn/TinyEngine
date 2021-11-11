@@ -88,69 +88,6 @@ namespace SharpEngine
         };
     }
 
-
-    struct Vector {
-        public float x, y, z;
-
-        public Vector(float x, float y, float z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public Vector(float x, float y)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = 0;
-        }
-
-        public static Vector operator *(Vector v, float f)
-        {
-            return new Vector(v.x * f, v.y * f, v.z * f);
-        }
-
-        public static Vector operator +(Vector v, Vector v2)
-        {
-            return new Vector(v.x + v2.x, v.y + v2.y, v.z + v2.z);
-        }
-        
-        public static Vector operator -(Vector v, Vector v2)
-        {
-            return new Vector(v.x - v2.x, v.y - v2.y, v.z - v2.z);
-        }
-
-        public static Vector operator /(Vector v, float f)
-        {
-            return new Vector(v.x / f, v.y / f, v.z / f);
-        }
-
-        public static Vector Max(Vector a, Vector b)
-        {
-            return new Vector(Math.Max(a.x, b.x), Math.Max(a.y, b.y), Math.Max(a.z, b.z));
-        }
-
-        public static Vector Min(Vector a, Vector b)
-        {
-            return new Vector(Math.Min(a.x, b.x), Math.Min(a.y, b.y), Math.Min(a.z, b.z));
-        }
-
-        public static float Distance(Vector a, Vector b)
-        {
-            float e1, e2, e3;
-
-            e1 = Max(a, b).x - Min(a, b).x;
-            e2 = Max(a, b).y - Min(a, b).y;
-            
-            e3 = (float)Math.Sqrt(Math.Pow(e1, 2) + Math.Pow(e2, 2));
-
-
-            // Temporary output
-            return e3;
-        }
-    }
-    
     
     class Program
     {
@@ -179,10 +116,28 @@ namespace SharpEngine
             CreateShaderProgram();
 
             float movement = .001f;
-            float rotationSpeed = .01f;
+            float rotationSpeed = .001f;
 
             centerPoint2.x = .5f;
             centerPoint2.y = .5f;
+
+            Console.WriteLine(Vector.Distance(centerPoint2, centerPoint));
+
+            Vector min = vertices[0];
+            Vector max = vertices[0];
+            for (int i = 0; i < vertices.Length / 2; i++)
+            {
+                min = Vector.Min(min, vertices[i]);
+                max = Vector.Max(max, vertices[i]);
+            }
+
+            Vector newcenterPoint = (max + min) / 2;
+
+            Console.WriteLine(newcenterPoint.x);
+            Console.WriteLine(newcenterPoint.y);
+            Console.WriteLine(newcenterPoint.z);
+
+            centerPoint = newcenterPoint;
             
             float scale = 1;
             float scaleMultiplier = 0.999f;
@@ -197,36 +152,39 @@ namespace SharpEngine
 
                 Render(window);
 
+                // Console.WriteLine(Vector.Distance(new Vector(0,0,0), centerPoint2));
+                // Console.WriteLine(Vector.Distance(new Vector(0,0,0), centerPoint));
+
                 // scaleY();
                 // MoveRight();
                 // MoveDown();
                 // Shrink();
                 // Grow();
                 
-                foreach (Vector v in vertices)
-                {
-                    if (v.x >= 1 || v.y >= 1 || v.z >= 1)
-                    {
-                        movement = Math.Abs(movement) * -1;
-                    }
-
-                    if (v.x <= -1 || v.y <= -1 || v.z <= -1)
-                    {
-                        movement = Math.Abs(movement);
-                    }
-                }
-                
-                
-                for (var i = 0; i < vertices.Length; i++)
-                {
-                    // vertices[i] *= 1.0001f;
-                    vertices[i] += new Vector(movement, movement, 0);
-                }
-
-                centerPoint.y += movement;
-                centerPoint2.y += movement;
-                centerPoint.x += movement;
-                centerPoint2.x += movement;
+                // foreach (Vector v in vertices)
+                // {
+                //     if (v.x >= 1 || v.y >= 1 || v.z >= 1)
+                //     {
+                //         movement = Math.Abs(movement) * -1;
+                //     }
+                //
+                //     if (v.x <= -1 || v.y <= -1 || v.z <= -1)
+                //     {
+                //         movement = Math.Abs(movement);
+                //     }
+                // }
+                //
+                //
+                // for (var i = 0; i < vertices.Length; i++)
+                // {
+                //     // vertices[i] *= 1.0001f;
+                //     vertices[i] += new Vector(movement, movement, 0);
+                // }
+                //
+                // centerPoint.y += movement;
+                // centerPoint2.y += movement;
+                // centerPoint.x += movement;
+                // centerPoint2.x += movement;
                 
 
                 for (int i = 0; i < vertices.Length / 2; i++)
@@ -250,52 +208,52 @@ namespace SharpEngine
                 }
 
                 
-                // Change the scale.
-                scale *= scaleMultiplier;
-                if (scale > 1)
-                {
-                    scaleMultiplier = 0.999f;
-                }
-                if (scale < .5f)
-                {
-                    scaleMultiplier = 1.001f;
-                }
-
-                for (int i = 0; i < vertices.Length / 2; i++)
-                {
-                    float tempX;
-                    float tempY;
-
-                    tempX = vertices[i].x - centerPoint.x;
-                    tempY = vertices[i].y - centerPoint.y;
-
-                    tempX *= scaleMultiplier;
-                    tempY *= scaleMultiplier;
-
-                    tempX += centerPoint.x;
-                    tempY += centerPoint.y;
-
-                    vertices[i].x = tempX;
-                    vertices[i].y = tempY;
-                }
-
-                for (int i = vertices.Length / 2; i < vertices.Length; i++)
-                {
-                    float tempX;
-                    float tempY;
-
-                    tempX = vertices[i].x - centerPoint2.x;
-                    tempY = vertices[i].y - centerPoint2.y;
-
-                    tempX *= scaleMultiplier;
-                    tempY *= scaleMultiplier;
-
-                    tempX += centerPoint2.x;
-                    tempY += centerPoint2.y;
-
-                    vertices[i].x = tempX;
-                    vertices[i].y = tempY;
-                }
+                // // Change the scale.
+                // scale *= scaleMultiplier;
+                // if (scale > 1)
+                // {
+                //     scaleMultiplier = 0.999f;
+                // }
+                // if (scale < .5f)
+                // {
+                //     scaleMultiplier = 1.001f;
+                // }
+                //
+                // for (int i = 0; i < vertices.Length / 2; i++)
+                // {
+                //     float tempX;
+                //     float tempY;
+                //
+                //     tempX = vertices[i].x - centerPoint.x;
+                //     tempY = vertices[i].y - centerPoint.y;
+                //
+                //     tempX *= scaleMultiplier;
+                //     tempY *= scaleMultiplier;
+                //
+                //     tempX += centerPoint.x;
+                //     tempY += centerPoint.y;
+                //
+                //     vertices[i].x = tempX;
+                //     vertices[i].y = tempY;
+                // }
+                //
+                // for (int i = vertices.Length / 2; i < vertices.Length; i++)
+                // {
+                //     float tempX;
+                //     float tempY;
+                //
+                //     tempX = vertices[i].x - centerPoint2.x;
+                //     tempY = vertices[i].y - centerPoint2.y;
+                //
+                //     tempX *= scaleMultiplier;
+                //     tempY *= scaleMultiplier;
+                //
+                //     tempX += centerPoint2.x;
+                //     tempY += centerPoint2.y;
+                //
+                //     vertices[i].x = tempX;
+                //     vertices[i].y = tempY;
+                // }
 
                 UpdateTriangleBuffer();
             }

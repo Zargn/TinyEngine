@@ -9,96 +9,107 @@ using static OpenGL.Gl;
 
 namespace SharpEngine
 {
-    class Triangle
-    {
-        public void AddToPipeline()
-        {
-            float[] temp = new float[GlobalVertices.Length + vertices.Length];
-            vertices.CopyTo(temp, 0);
-            GlobalVertices.CopyTo(temp, 9);
-            GlobalVertices = new float[temp.Length];
-            temp.CopyTo(GlobalVertices, 0);
-            // fixed (float* vertex = &vertices[0])
-            // {
-            //     // Will put the data in the buffer.
-            //     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
-            //     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
-            // }
-            Console.WriteLine("Vertices:");
-            foreach (float f in GlobalVertices)
-            {
-                Console.WriteLine(f);
-            }
-        }
-    
-        public static int NumberOfTriangles = 0;
-        
-        private static float[] GlobalVertices = new float[9];
-    
-        public static unsafe void Render()
-        {
-            fixed (float* vertex = &GlobalVertices[0])
-            {
-                // Will put the data in the buffer.
-                glBufferData(GL_ARRAY_BUFFER, sizeof(float) * GlobalVertices.Length, vertex, GL_STATIC_DRAW);
-                // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
-            }
-        }
-        
-        private static uint nextId;
-        private uint id;
-        
-        public Triangle(float x, float y, float z)
-        {
-            vertices[0] += x;
-            vertices[1] += y;
-            vertices[2] += z;
-            vertices[3] += x;
-            vertices[4] += y;
-            vertices[5] += z;
-            vertices[6] += x;
-            vertices[7] += y;
-            vertices[8] += z;
-    
-            id = nextId;
-            nextId++;
-    
-            NumberOfTriangles++;
-            
-            createTriangle();
-        }
-    
-        unsafe void createTriangle()
-        {
-            // Render();
-    
-            glVertexAttribPointer(id, 3, GL_FLOAT, false, 3 * sizeof(float), null);
-    
-            glEnableVertexAttribArray(id);
-        }
-        
-        float[] vertices = new[]
-        {
-            // Vertex 1
-            -.5f, -.5f, 0f,
-            // Vertex 2
-            .5f, -.5f, 0f,
-            // Vertex 3
-            0f, .5f, 0f
-        };
-    }
+    // class Triangle
+    // {
+    //     public void AddToPipeline()
+    //     {
+    //         float[] temp = new float[GlobalVertices.Length + vertices.Length];
+    //         vertices.CopyTo(temp, 0);
+    //         GlobalVertices.CopyTo(temp, 9);
+    //         GlobalVertices = new float[temp.Length];
+    //         temp.CopyTo(GlobalVertices, 0);
+    //         // fixed (float* vertex = &vertices[0])
+    //         // {
+    //         //     // Will put the data in the buffer.
+    //         //     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
+    //         //     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
+    //         // }
+    //         Console.WriteLine("Vertices:");
+    //         foreach (float f in GlobalVertices)
+    //         {
+    //             Console.WriteLine(f);
+    //         }
+    //     }
+    //
+    //     public static int NumberOfTriangles = 0;
+    //     
+    //     private static float[] GlobalVertices = new float[9];
+    //
+    //     public static unsafe void Render()
+    //     {
+    //         fixed (float* vertex = &GlobalVertices[0])
+    //         {
+    //             // Will put the data in the buffer.
+    //             glBufferData(GL_ARRAY_BUFFER, sizeof(float) * GlobalVertices.Length, vertex, GL_STATIC_DRAW);
+    //             // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
+    //         }
+    //     }
+    //     
+    //     private static uint nextId;
+    //     private uint id;
+    //     
+    //     public Triangle(float x, float y, float z)
+    //     {
+    //         vertices[0] += x;
+    //         vertices[1] += y;
+    //         vertices[2] += z;
+    //         vertices[3] += x;
+    //         vertices[4] += y;
+    //         vertices[5] += z;
+    //         vertices[6] += x;
+    //         vertices[7] += y;
+    //         vertices[8] += z;
+    //
+    //         id = nextId;
+    //         nextId++;
+    //
+    //         NumberOfTriangles++;
+    //         
+    //         createTriangle();
+    //     }
+    //
+    //     unsafe void createTriangle()
+    //     {
+    //         // Render();
+    //
+    //         glVertexAttribPointer(id, 3, GL_FLOAT, false, 3 * sizeof(float), null);
+    //
+    //         glEnableVertexAttribArray(id);
+    //     }
+    //     
+    //     float[] vertices = new[]
+    //     {
+    //         // Vertex 1
+    //         -.5f, -.5f, 0f,
+    //         // Vertex 2
+    //         .5f, -.5f, 0f,
+    //         // Vertex 3
+    //         0f, .5f, 0f
+    //     };
+    // }
 
-    
+
     class Program
     {
-        static Vector[] vertices = new[]
+        // static Vector[] vertices = new[]
+        // {
+        //     new Vector(-.1f, -.1f),
+        //     new Vector(.1f, -.1f),
+        //     new Vector(0f,.1f),
+        //     new Vector(.4f, .4f),
+        //     new Vector(.6f, .4f),
+        //     new Vector(.5f,.6f)
+        // };
+        
+        static Vertex[] vertices = new Vertex[]
         {
-            new Vector(-.1f, -.1f),
-            new Vector(.1f, -.1f),
-            new Vector(0f,.1f),
-            new Vector(.4f, .4f),
-            new Vector(.6f, .4f),
-            new Vector(.5f,.6f)
+            new Vertex(new Vector(-.1f, -.1f), Color.Red),
+            new Vertex(new Vector(.1f, -.1f), Color.Green),
+            new Vertex(new Vector(0f, .1f), Color.Blue),
+            
+            new Vertex(new Vector(0f, 0f), Color.Red),
+            new Vertex(new Vector(1f, 0f), Color.Green),
+            new Vertex(new Vector(0f, 1f), Color.Blue)
         };
 
         private static Vector centerPoint = new Vector(0, 0);
@@ -123,12 +134,12 @@ namespace SharpEngine
 
             Console.WriteLine(Vector.Distance(centerPoint2, centerPoint));
 
-            Vector min = vertices[0];
-            Vector max = vertices[0];
+            Vector min = vertices[0].position;
+            Vector max = vertices[0].position;
             for (int i = 0; i < vertices.Length / 2; i++)
             {
-                min = Vector.Min(min, vertices[i]);
-                max = Vector.Max(max, vertices[i]);
+                min = Vector.Min(min, vertices[i].position);
+                max = Vector.Max(max, vertices[i].position);
             }
 
             Vector newcenterPoint = (max + min) / 2;
@@ -161,99 +172,102 @@ namespace SharpEngine
                 // Shrink();
                 // Grow();
                 
-                // foreach (Vector v in vertices)
-                // {
-                //     if (v.x >= 1 || v.y >= 1 || v.z >= 1)
-                //     {
-                //         movement = Math.Abs(movement) * -1;
-                //     }
-                //
-                //     if (v.x <= -1 || v.y <= -1 || v.z <= -1)
-                //     {
-                //         movement = Math.Abs(movement);
-                //     }
-                // }
-                //
-                //
-                // for (var i = 0; i < vertices.Length; i++)
-                // {
-                //     // vertices[i] *= 1.0001f;
-                //     vertices[i] += new Vector(movement, movement, 0);
-                // }
-                //
-                // centerPoint.y += movement;
-                // centerPoint2.y += movement;
-                // centerPoint.x += movement;
-                // centerPoint2.x += movement;
+                foreach (Vertex v in vertices)
+                {
+                    if (v.position.x >= 1 || v.position.y >= 1 || v.position.z >= 1)
+                    {
+                        movement = Math.Abs(movement) * -1;
+                    }
+                
+                    if (v.position.x <= -1 || v.position.y <= -1 || v.position.z <= -1)
+                    {
+                        movement = Math.Abs(movement);
+                    }
+                }
+                
+                
+                for (var i = 0; i < vertices.Length; i++)
+                {
+                    // vertices[i] *= 1.0001f;
+                    vertices[i].position += new Vector(movement, movement, 0);
+                }
+                
+                centerPoint.y += movement;
+                centerPoint2.y += movement;
+                centerPoint.x += movement;
+                centerPoint2.x += movement;
                 
 
                 for (int i = 0; i < vertices.Length / 2; i++)
                 {
-                    Vector temp = new Vector(vertices[i].x, vertices[i].y);
+                    Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y);
                 
-                    vertices[i].x = (float) Math.Cos(rotationSpeed) * (temp.x - centerPoint.x) -
+                    vertices[i].position.x = (float) Math.Cos(rotationSpeed) * (temp.x - centerPoint.x) -
                         (float)Math.Sin(rotationSpeed) * (temp.y - centerPoint.y) + centerPoint.x;
-                    vertices[i].y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint.x) +
-                                    (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint.y) + centerPoint.y;
+                    vertices[i].position.y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint.x) +
+                                             (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint.y) + centerPoint.y;
+                }
+                
+                // TODO LOG THE VALUES OF VERTICES
+                
+                
+                for (int i = vertices.Length / 2; i < vertices.Length; i++)
+                {
+                    Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y);
+                
+                    vertices[i].position.x = (float) Math.Cos(rotationSpeed) * (temp.x - centerPoint2.x) -
+                        (float)Math.Sin(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.x;
+                    vertices[i].position.y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint2.x) +
+                                             (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.y;
+                }
+
+                
+                // Change the scale.
+                scale *= scaleMultiplier;
+                if (scale > 1)
+                {
+                    scaleMultiplier = 0.999f;
+                }
+                if (scale < .5f)
+                {
+                    scaleMultiplier = 1.001f;
+                }
+                
+                for (int i = 0; i < vertices.Length / 2; i++)
+                {
+                    float tempX;
+                    float tempY;
+                
+                    tempX = vertices[i].position.x - centerPoint.x;
+                    tempY = vertices[i].position.y - centerPoint.y;
+                
+                    tempX *= scaleMultiplier;
+                    tempY *= scaleMultiplier;
+                
+                    tempX += centerPoint.x;
+                    tempY += centerPoint.y;
+                
+                    vertices[i].position.x = tempX;
+                    vertices[i].position.y = tempY;
                 }
                 
                 for (int i = vertices.Length / 2; i < vertices.Length; i++)
                 {
-                    Vector temp = new Vector(vertices[i].x, vertices[i].y);
+                    float tempX;
+                    float tempY;
                 
-                    vertices[i].x = (float) Math.Cos(rotationSpeed) * (temp.x - centerPoint2.x) -
-                        (float)Math.Sin(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.x;
-                    vertices[i].y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint2.x) +
-                                    (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.y;
+                    tempX = vertices[i].position.x - centerPoint2.x;
+                    tempY = vertices[i].position.y - centerPoint2.y;
+                
+                    tempX *= scaleMultiplier;
+                    tempY *= scaleMultiplier;
+                
+                    tempX += centerPoint2.x;
+                    tempY += centerPoint2.y;
+                
+                    vertices[i].position.x = tempX;
+                    vertices[i].position.y = tempY;
                 }
-
-                
-                // // Change the scale.
-                // scale *= scaleMultiplier;
-                // if (scale > 1)
-                // {
-                //     scaleMultiplier = 0.999f;
-                // }
-                // if (scale < .5f)
-                // {
-                //     scaleMultiplier = 1.001f;
-                // }
-                //
-                // for (int i = 0; i < vertices.Length / 2; i++)
-                // {
-                //     float tempX;
-                //     float tempY;
-                //
-                //     tempX = vertices[i].x - centerPoint.x;
-                //     tempY = vertices[i].y - centerPoint.y;
-                //
-                //     tempX *= scaleMultiplier;
-                //     tempY *= scaleMultiplier;
-                //
-                //     tempX += centerPoint.x;
-                //     tempY += centerPoint.y;
-                //
-                //     vertices[i].x = tempX;
-                //     vertices[i].y = tempY;
-                // }
-                //
-                // for (int i = vertices.Length / 2; i < vertices.Length; i++)
-                // {
-                //     float tempX;
-                //     float tempY;
-                //
-                //     tempX = vertices[i].x - centerPoint2.x;
-                //     tempY = vertices[i].y - centerPoint2.y;
-                //
-                //     tempX *= scaleMultiplier;
-                //     tempY *= scaleMultiplier;
-                //
-                //     tempX += centerPoint2.x;
-                //     tempY += centerPoint2.y;
-                //
-                //     vertices[i].x = tempX;
-                //     vertices[i].y = tempY;
-                // }
 
                 UpdateTriangleBuffer();
             }
@@ -288,13 +302,13 @@ namespace SharpEngine
         //     }
         // }
         //
-        static void MoveRight()
-        {
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                vertices[i].x += 0.0001f;
-            }
-        }
+        // static void MoveRight()
+        // {
+        //     for (var i = 0; i < vertices.Length; i++)
+        //     {
+        //         vertices[i].position.x += 0.0001f;
+        //     }
+        // }
         //
         // static void MoveDown()
         // {
@@ -329,18 +343,21 @@ namespace SharpEngine
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
             
             UpdateTriangleBuffer();
-        
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, vertexSize * sizeof(float), null);
+
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), null);
+            
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (void*)sizeof(Vector));
         
             glEnableVertexAttribArray(0);
+            glEnableVertexAttribArray(1);
         }
 
         static unsafe void UpdateTriangleBuffer()
         {
-            fixed (Vector* vertex = &vertices[0])
+            fixed (Vertex* vertex = &vertices[0])
             {
                 // Will put the data in the buffer.
-                glBufferData(GL_ARRAY_BUFFER, sizeof(Vector) * vertices.Length, vertex, GL_DYNAMIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.Length, vertex, GL_DYNAMIC_DRAW);
             }
         }
 
@@ -349,12 +366,12 @@ namespace SharpEngine
         {
             // Create vertex shader
             var vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, File.ReadAllText("Shaders/ScreenCoordinate.vert"));
+            glShaderSource(vertexShader, File.ReadAllText("Shaders/position-color.vert"));
             glCompileShader(vertexShader);
 
             // Create fragment shader
             var fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader, File.ReadAllText("Shaders/green.frag"));
+            glShaderSource(fragmentShader, File.ReadAllText("Shaders/vertex-color.frag"));
             glCompileShader(fragmentShader);
 
             // rendering pipeline - create shader program

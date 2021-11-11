@@ -50,15 +50,17 @@ namespace Engine_Protoype
         private static uint nextId;
         private uint id;
         
-        public Triangle(float x, float y, float z)
+        public Triangle(Vector value)
         {
             // Put the center of the triangle at the desired offset.
             for (int i = 0; i < vertices.Length; i++)
             {
-                vertices[i].x += x;
-                vertices[i].y += y;
-                vertices[i].z += z;
+                vertices[i].x += value.x;
+                vertices[i].y += value.y;
+                vertices[i].z += value.z;
             }
+
+            centerPoint = value;
 
             id = nextId;
             nextId++;
@@ -79,59 +81,27 @@ namespace Engine_Protoype
 
         public void Rotate(float degrees)
         {
-            // List<float> temp = new List<float>();
-            // vertices.CopyTo(s
-            // temp = null;
-            
-            // x
-            // vertices[4] = (float) Math.Cos(degrees);
-            // vertices[5] = (float) - Math.Sin(degrees);
-            // vertices[7] = (float) Math.Sin(degrees);
-            // vertices[8] = (float) Math.Cos(degrees);
-
-            // y
-            // vertices[0] = (float) Math.Cos(degrees);
-            // vertices[2] = (float) Math.Sin(degrees);
-            // vertices[6] = (float) - Math.Sin(degrees);
-            // vertices[8] = (float) Math.Cos(degrees);
-
-            // z
-            // vertices[0] += (float) Math.Cos(degrees);
-            // vertices[1] += (float) - Math.Sin(degrees);
-            // vertices[3] += (float) Math.Sin(degrees);
-            // vertices[4] += (float) Math.Cos(degrees);
-            // vertices[8] += 1;
-
             for (int i = 0; i < vertices.Length; i++)
             {
-                vertices[i].x = vertices[i].x * (float)Math.Cos(degrees) - vertices[i].y * (float)Math.Sin(degrees);
-                vertices[i].y = vertices[i].x * (float)Math.Sin(degrees) + vertices[i].y * (float)Math.Cos(degrees);
+                Vector temp = new Vector(vertices[i].x, vertices[i].y);
+                
+                vertices[i].x = (float) Math.Cos(degrees) * (temp.x - centerPoint.x) -
+                    (float)Math.Sin(degrees) * (temp.y - centerPoint.y) + centerPoint.x;
+                vertices[i].y = (float) Math.Sin(degrees) * (temp.x - centerPoint.x) +
+                    (float)Math.Cos(degrees) * (temp.y - centerPoint.y) + centerPoint.y;
             }
-            
-            
-            // for (var i = 0; i < vertices.Length; i++)
-            // {
-            //     vertices[i].x = (float)(vertices[i].x * Math.Cos(0.01f) + vertices[i].y * Math.Sin(0.01f));
-            //     vertices[i].y = (float)(vertices[i].y * Math.Cos(0.01f) - vertices[i].x * Math.Sin(0.01f));  
-            // }
-            
-            // xf = cx + (int)((float)(px - cx) * cos(theta))
-            //      - ((float)(py - cy) * sin(theta));
-            // yf = cy + (int)((float)(px - cx) * sin(theta))
-            //         + ((float)(py - cy) * cos(theta));
-            
-            
-            
         }
-        
+
+        private Vector centerPoint = new Vector(0, 0, 0);
+
         Vector[] vertices = new[]
         {
             // new Vector(-.1f,-.1f),
             // new Vector(.1f,-.1f),
             // new Vector(0f,.1f)
-            new Vector(-.4f,-.3f),
-            new Vector(.4f,-.3f),
-            new Vector(0f,.5f)
+            new Vector(-.1f,-.07f),
+            new Vector(.1f,-.07f),
+            new Vector(0f,.123f)
         };
     }
 
@@ -149,10 +119,10 @@ namespace Engine_Protoype
             
             
             List<Triangle> triangles = new List<Triangle>();
-            triangles.Add(new Triangle(0, 0, 0));
-            // triangles.Add(new Triangle(0, 0, 0));
-            // triangles.Add(new Triangle(-.3f, 0, 0));
-            // triangles.Add(new Triangle(.3f, 0, 0));
+            triangles.Add(new Triangle(new Vector(0,0,0)));
+            // triangles.Add(new Triangle(new Vector(0,0,0)));
+            triangles.Add(new Triangle(new Vector(-.3f,0,0)));
+            // triangles.Add(new Triangle(new Vector(.3f,0,0)));
 
             CreateShaderProgram();
 
@@ -173,10 +143,11 @@ namespace Engine_Protoype
                 {
                     triangle.AddToPipeline();
                 }
-                triangles[0].Rotate(angle);
+                triangles[0].Rotate(0.01f);
+                // triangles[1].Rotate(0.01f);
 
-                angle += 0.1f;
-                if (angle >= 360)
+                angle += 0.001f;
+                if (angle >= 3.14f)
                     angle = 0;
                 Triangle.Render();
             }

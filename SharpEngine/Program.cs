@@ -140,6 +140,8 @@ namespace SharpEngine
             new Vector(.5f,.6f)
         };
 
+        private static Vector centerPoint = new Vector(0, 0);
+
         static void Main(string[] args)
         {
             var window = CreateWindow();
@@ -151,6 +153,7 @@ namespace SharpEngine
             CreateShaderProgram();
 
             float movement = .0001f;
+            float rotationSpeed = .0001f;
             
             // Render loop close the window if the X button is clicked.
             while (!Glfw.WindowShouldClose(window))
@@ -173,6 +176,10 @@ namespace SharpEngine
                     // vertices[i] *= 1.0001f;
                     vertices[i] += new Vector(0, movement, 0);
                 }
+
+                centerPoint.y += movement;
+                
+                
                 foreach (Vector v in vertices)
                 {
                     if (v.x >= 1 || v.y >= 1 || v.z >= 1)
@@ -184,6 +191,16 @@ namespace SharpEngine
                     {
                         movement *= -1;
                     }
+                }
+
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    Vector temp = new Vector(vertices[i].x, vertices[i].y);
+                
+                    vertices[i].x = (float) Math.Cos(rotationSpeed) * (temp.x - centerPoint.x) -
+                        (float)Math.Sin(rotationSpeed) * (temp.y - centerPoint.y) + centerPoint.x;
+                    vertices[i].y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint.x) +
+                                    (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint.y) + centerPoint.y;
                 }
                 
                 UpdateTriangleBuffer();

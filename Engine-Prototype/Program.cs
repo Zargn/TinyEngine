@@ -20,9 +20,9 @@ namespace Engine_Protoype
             
             
             List<Triangle> triangles = new List<Triangle>();
-            triangles.Add(new Triangle(new Vector(0,0,0)));
+            triangles.Add(new Triangle(new Vertex(new Vector(0,0,0), Color.Blue)));
             // triangles.Add(new Triangle(new Vector(0,0,0)));
-            triangles.Add(new Triangle(new Vector(-.3f,0,0)));
+            triangles.Add(new Triangle(new Vertex(new Vector(-.3f,0,0), Color.Blue)));
             // triangles.Add(new Triangle(new Vector(.3f,0,0)));
 
             CreateShaderProgram();
@@ -60,11 +60,11 @@ namespace Engine_Protoype
                 
                 // Rotate one triangle
                 triangles[0].Rotate(0.01f);
-
-                // Scale a triangle between 100% and 50%
-                triangles[0].Scale(scaleMultiplier);
+                //
+                // // Scale a triangle between 100% and 50%
+                // triangles[0].Scale(scaleMultiplier);
                 
-                Triangle.Render();
+                Triangle.AddToBuffer();
             }
         }
 

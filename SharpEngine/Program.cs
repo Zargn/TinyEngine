@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -88,16 +89,37 @@ namespace SharpEngine
     //         0f, .5f, 0f
     //     };
     // }
-
+    
+    
     public class Triangle
     {
+        private Vertex[] vertices;
         
+        public Triangle(Vertex[] vertices)
+        {
+            this.vertices = vertices;
+        }
+
+        public void Scale(float multiplier)
+        {
+            var min = vertices[0].position;
+            for (var i = 1; )
+        }
     }
+    
     
     
     
     class Program
     {
+        private static Triangle triangle = new Triangle(
+            new Vertex[] 
+            {
+                new Vertex(new Vector(-.1f, -.1f), new Color(0, 1, 1, 1)),
+                new Vertex(new Vector(.1f, -.1f), new Color(1, 1, 0, 1)), 
+                new Vertex(new Vector(0f, .1f), Color.Blue)
+        });
+        
         // static Vector[] vertices = new[]
         // {
         //     new Vector(-.1f, -.1f),
@@ -108,16 +130,16 @@ namespace SharpEngine
         //     new Vector(.5f,.6f)
         // };
         
-        static Vertex[] vertices = new Vertex[]
-        {
-            new Vertex(new Vector(-.1f, -.1f), new Color(0,1,1,1)),
-            new Vertex(new Vector(.1f, -.1f), new Color(1,1,0,1)),
-            new Vertex(new Vector(0f, .1f), Color.Blue),
-            
-            // new Vertex(new Vector(0f, 0.4f), Color.Red),
-            // new Vertex(new Vector(0.1f, 0.4f), Color.Green),
-            // new Vertex(new Vector(0f, 0.5f), Color.Blue)
-        };
+        // static Vertex[] vertices = new Vertex[]
+        // {
+        //     new Vertex(new Vector(-.1f, -.1f), new Color(0,1,1,1)),
+        //     new Vertex(new Vector(.1f, -.1f), new Color(1,1,0,1)),
+        //     new Vertex(new Vector(0f, .1f), Color.Blue),
+        //     
+        //     // new Vertex(new Vector(0f, 0.4f), Color.Red),
+        //     // new Vertex(new Vector(0.1f, 0.4f), Color.Green),
+        //     // new Vertex(new Vector(0f, 0.5f), Color.Blue)
+        // };
 
         private static Vector centerPoint = new Vector(0, 0);
         
@@ -224,21 +246,7 @@ namespace SharpEngine
                     vertices[i].position.y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint.x) +
                                              (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint.y) + centerPoint.y;
                 }
-                
-                // TODO LOG THE VALUES OF VERTICES
-                
-                
-                for (int i = vertices.Length / 2; i < vertices.Length; i++)
-                {
-                    Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y);
-                
-                    vertices[i].position.x = (float) Math.Cos(rotationSpeed) * (temp.x - centerPoint2.x) -
-                        (float)Math.Sin(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.x;
-                    vertices[i].position.y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint2.x) +
-                                             (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.y;
-                }
 
-                
                 // Change the scale.
                 scale *= scaleMultiplier;
                 if (scale > 1)
@@ -268,23 +276,6 @@ namespace SharpEngine
                     vertices[i].position.y = tempY;
                 }
                 
-                for (int i = vertices.Length / 2; i < vertices.Length; i++)
-                {
-                    float tempX;
-                    float tempY;
-                
-                    tempX = vertices[i].position.x - centerPoint2.x;
-                    tempY = vertices[i].position.y - centerPoint2.y;
-                
-                    tempX *= scaleMultiplier;
-                    tempY *= scaleMultiplier;
-                
-                    tempX += centerPoint2.x;
-                    tempY += centerPoint2.y;
-                
-                    vertices[i].position.x = tempX;
-                    vertices[i].position.y = tempY;
-                }
 
                 UpdateTriangleBuffer();
             }

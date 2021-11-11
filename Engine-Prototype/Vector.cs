@@ -2,7 +2,7 @@
 
 namespace Engine_Protoype
 {
-    struct Vector
+    public struct Vector
     {
         public float x, y, z;
 

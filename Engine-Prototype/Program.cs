@@ -152,12 +152,12 @@ namespace Engine_Protoype
         {
             // Create vertex shader
             var vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, File.ReadAllText("Shaders/ScreenCoordinate.vert"));
+            glShaderSource(vertexShader, File.ReadAllText("Shaders/position-color.vert"));
             glCompileShader(vertexShader);
 
             // Create fragment shader
             var fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader, File.ReadAllText("Shaders/green.frag"));
+            glShaderSource(fragmentShader, File.ReadAllText("Shaders/vertex-color.frag"));
             glCompileShader(fragmentShader);
 
             // rendering pipeline - create shader program

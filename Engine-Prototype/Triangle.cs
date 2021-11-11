@@ -1,5 +1,6 @@
 ﻿using System;
-using OpenGL;
+using OpenGL.Gl;
+using GLFW;
 
 namespace Engine_Protoype
 {
@@ -14,6 +15,8 @@ namespace Engine_Protoype
         
         private static Vector[] globalVertices = new Vector[3];
 
+        
+        
         public static unsafe void Render()
         {
             fixed (Vector* vertex = &globalVertices[0])
@@ -23,8 +26,12 @@ namespace Engine_Protoype
             }
         }
         
+        
+        
         private static uint nextId;
         private uint id;
+        
+        
         
         public Triangle(Vector value)
         {
@@ -48,13 +55,22 @@ namespace Engine_Protoype
             createTriangle();
         }
     
+        
+        
         unsafe void createTriangle()
         {
             Gl.glVertexAttribPointer(id, 3, Gl.GL_FLOAT, false, 3 * sizeof(float), null);
     
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
+            
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
+
+            
             Gl.glEnableVertexAttribArray(id);
         }
 
+        
+        
         public void Rotate(float degrees)
         {
             for (int i = 0; i < vertices.Length; i++)
@@ -68,6 +84,8 @@ namespace Engine_Protoype
             }
         }
 
+        
+        
         public void Scale(float scaleMultiplier)
         {
             for (int i = 0; i < vertices.Length; i++)
@@ -91,8 +109,12 @@ namespace Engine_Protoype
             }
         }
 
+        
+        
         private Vector centerPoint = new Vector(0, 0, 0);
 
+        
+        
         Vector[] vertices = new[]
         {
             // new Vector(-.1f,-.1f),

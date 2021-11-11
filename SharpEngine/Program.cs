@@ -141,6 +141,8 @@ namespace SharpEngine
         };
 
         private static Vector centerPoint = new Vector(0, 0);
+        
+        private static Vector centerPoint2 = new Vector(0, 0);
 
         static void Main(string[] args)
         {
@@ -152,8 +154,11 @@ namespace SharpEngine
 
             CreateShaderProgram();
 
-            float movement = .0001f;
-            float rotationSpeed = .0001f;
+            float movement = .001f;
+            float rotationSpeed = .01f;
+
+            centerPoint2.x = .5f;
+            centerPoint2.y = .5f;
             
             // Render loop close the window if the X button is clicked.
             while (!Glfw.WindowShouldClose(window))
@@ -178,6 +183,7 @@ namespace SharpEngine
                 }
 
                 centerPoint.y += movement;
+                centerPoint2.y += movement;
                 
                 
                 foreach (Vector v in vertices)
@@ -193,7 +199,7 @@ namespace SharpEngine
                     }
                 }
 
-                for (int i = 0; i < vertices.Length; i++)
+                for (int i = 0; i < vertices.Length / 2; i++)
                 {
                     Vector temp = new Vector(vertices[i].x, vertices[i].y);
                 
@@ -201,6 +207,16 @@ namespace SharpEngine
                         (float)Math.Sin(rotationSpeed) * (temp.y - centerPoint.y) + centerPoint.x;
                     vertices[i].y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint.x) +
                                     (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint.y) + centerPoint.y;
+                }
+                
+                for (int i = vertices.Length / 2; i < vertices.Length; i++)
+                {
+                    Vector temp = new Vector(vertices[i].x, vertices[i].y);
+                
+                    vertices[i].x = (float) Math.Cos(rotationSpeed) * (temp.x - centerPoint2.x) -
+                        (float)Math.Sin(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.x;
+                    vertices[i].y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint2.x) +
+                                    (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.y;
                 }
                 
                 UpdateTriangleBuffer();

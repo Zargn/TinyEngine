@@ -160,6 +160,9 @@ namespace SharpEngine
             centerPoint2.x = .5f;
             centerPoint2.y = .5f;
             
+            float scale = 1;
+            float scaleMultiplier = 0.999f;
+            
             // Render loop close the window if the X button is clicked.
             while (!Glfw.WindowShouldClose(window))
             {
@@ -176,6 +179,20 @@ namespace SharpEngine
                 // Shrink();
                 // Grow();
                 
+                foreach (Vector v in vertices)
+                {
+                    if (v.x >= 1 || v.y >= 1 || v.z >= 1)
+                    {
+                        movement = Math.Abs(movement) * -1;
+                    }
+
+                    if (v.x <= -1 || v.y <= -1 || v.z <= -1)
+                    {
+                        movement = Math.Abs(movement);
+                    }
+                }
+                
+                
                 for (var i = 0; i < vertices.Length; i++)
                 {
                     // vertices[i] *= 1.0001f;
@@ -185,19 +202,6 @@ namespace SharpEngine
                 centerPoint.y += movement;
                 centerPoint2.y += movement;
                 
-                
-                foreach (Vector v in vertices)
-                {
-                    if (v.x >= 1 || v.y >= 1 || v.z >= 1)
-                    {
-                        movement *= -1;
-                    }
-
-                    if (v.x <= -1 || v.y <= -1 || v.z <= -1)
-                    {
-                        movement *= -1;
-                    }
-                }
 
                 for (int i = 0; i < vertices.Length / 2; i++)
                 {
@@ -218,7 +222,55 @@ namespace SharpEngine
                     vertices[i].y = (float) Math.Sin(rotationSpeed) * (temp.x - centerPoint2.x) +
                                     (float)Math.Cos(rotationSpeed) * (temp.y - centerPoint2.y) + centerPoint2.y;
                 }
+
                 
+                // Change the scale.
+                scale *= scaleMultiplier;
+                if (scale > 1)
+                {
+                    scaleMultiplier = 0.999f;
+                }
+                if (scale < .5f)
+                {
+                    scaleMultiplier = 1.001f;
+                }
+
+                for (int i = 0; i < vertices.Length / 2; i++)
+                {
+                    float tempX;
+                    float tempY;
+
+                    tempX = vertices[i].x - centerPoint.x;
+                    tempY = vertices[i].y - centerPoint.y;
+
+                    tempX *= scaleMultiplier;
+                    tempY *= scaleMultiplier;
+
+                    tempX += centerPoint.x;
+                    tempY += centerPoint.y;
+
+                    vertices[i].x = tempX;
+                    vertices[i].y = tempY;
+                }
+
+                for (int i = vertices.Length / 2; i < vertices.Length; i++)
+                {
+                    float tempX;
+                    float tempY;
+
+                    tempX = vertices[i].x - centerPoint2.x;
+                    tempY = vertices[i].y - centerPoint2.y;
+
+                    tempX *= scaleMultiplier;
+                    tempY *= scaleMultiplier;
+
+                    tempX += centerPoint2.x;
+                    tempY += centerPoint2.y;
+
+                    vertices[i].x = tempX;
+                    vertices[i].y = tempY;
+                }
+
                 UpdateTriangleBuffer();
             }
         }

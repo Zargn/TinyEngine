@@ -92,6 +92,29 @@ namespace Engine_Protoype
             }
         }
 
+        public void Scale(float scaleMultiplier)
+        {
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                // Todo: Make cleaner and more compact!
+
+                float tempX;
+                float tempY;
+
+                tempX = vertices[i].x - centerPoint.x;
+                tempY = vertices[i].y - centerPoint.y;
+
+                tempX *= scaleMultiplier;
+                tempY *= scaleMultiplier;
+
+                tempX += centerPoint.x;
+                tempY += centerPoint.y;
+
+                vertices[i].x = tempX;
+                vertices[i].y = tempY;
+            }
+        }
+
         private Vector centerPoint = new Vector(0, 0, 0);
 
         Vector[] vertices = new[]
@@ -126,7 +149,8 @@ namespace Engine_Protoype
 
             CreateShaderProgram();
 
-            float angle = 0;
+            float scale = 1;
+            float scaleMultiplier = 0.999f;
             // Render loop close the window if the X button is clicked.
             while (!Glfw.WindowShouldClose(window))
             {
@@ -143,12 +167,25 @@ namespace Engine_Protoype
                 {
                     triangle.AddToPipeline();
                 }
-                triangles[0].Rotate(0.01f);
-                // triangles[1].Rotate(0.01f);
 
-                angle += 0.001f;
-                if (angle >= 3.14f)
-                    angle = 0;
+                
+                // Change the scale.
+                scale *= scaleMultiplier;
+                if (scale > 1)
+                {
+                    scaleMultiplier = 0.999f;
+                }
+                if (scale < .5f)
+                {
+                    scaleMultiplier = 1.001f;
+                }
+                
+                // Rotate one triangle
+                triangles[0].Rotate(0.01f);
+
+                // Scale a triangle between 100% and 50%
+                triangles[0].Scale(scaleMultiplier);
+                
                 Triangle.Render();
             }
         }

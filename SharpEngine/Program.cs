@@ -91,9 +91,10 @@ namespace SharpEngine
                 }
 
                 // triangle2.Rotate(90);
-                triangle.Rotate(currentRotation);
-                rectangle.Rotate(currentRotation);
-                // circle.Rotate(currentRotation);
+                triangle.Rotate(new Vector(54, 180, 45));
+                // rectangle.Rotate(currentRotation);
+                // // circle.Rotate(currentRotation);'
+                
                 currentRotation += 0.1f;
                 if (currentRotation >= 360)
                 {
@@ -103,9 +104,9 @@ namespace SharpEngine
         }
         static void Render(Window window) {
             triangle.Render();
-            triangle2.Render();
-            rectangle.Render();
-            circle.Render();
+            // triangle2.Render();
+            // rectangle.Render();
+            // circle.Render();
             cone.Render();
             // triangle3.Render();
             Glfw.SwapBuffers(window);

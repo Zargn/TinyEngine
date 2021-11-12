@@ -96,22 +96,68 @@ namespace SharpEngine
         }
 
 
-        private float currentRotationDegrees;
-        public void Rotate(float degrees)
-        {
-            float rDegrees = degrees * ((float)Math.PI / 180);
-            float rotateRadians = rDegrees - currentRotationDegrees;
-            currentRotationDegrees = rDegrees;
 
-            float cosR = (float)Math.Cos(rotateRadians);
-            float sinR = (float) Math.Sin(rotateRadians);
-            
-            for (int i = 0; i < vertices.Length; i++)
+        private Vector currentRotation;
+        public void Rotate(Vector rotations)
+        {
+            float xDegrees = rotations.x * ((float) Math.PI / 180);
+            float yDegrees = rotations.y * ((float) Math.PI / 180);
+            float zDegrees = rotations.z * ((float) Math.PI / 180);
+
+            float xRadians = xDegrees - currentRotation.x;
+            float yRadians = yDegrees - currentRotation.y;
+            float zRadians = zDegrees - currentRotation.z;
+
+            currentRotation.x = xDegrees;
+            currentRotation.y = yDegrees;
+            currentRotation.z = zDegrees;
+
+            if (rotations.x != 0)
             {
-                Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y);
+                // Rotate around X
+                float cosR = (float)Math.Cos(xRadians);
+                float sinR = (float)Math.Sin(xRadians);
+
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
+
+                    vertices[i].position.y = cosR * (temp.y - centerPoint.y) - sinR * (temp.z - centerPoint.z) + centerPoint.y;
+                    vertices[i].position.z = sinR * (temp.y - centerPoint.y) + cosR * (temp.z - centerPoint.z) + centerPoint.z;
+                }
+
+                Console.WriteLine("Rotated on x axis");
+            }
+
+            if (rotations.y != 0)
+            {
+                // Rotate around Y
+                float cosR = (float)Math.Cos(yRadians);
+                float sinR = (float)Math.Sin(yRadians);
                 
-                vertices[i].position.x = cosR * (temp.x - centerPoint.x) - sinR * (temp.y - centerPoint.y) + centerPoint.x;
-                vertices[i].position.y = sinR * (temp.x - centerPoint.x) + cosR * (temp.y - centerPoint.y) + centerPoint.y;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
+
+                    vertices[i].position.x = cosR * (temp.x - centerPoint.x) + sinR * (temp.z - centerPoint.z) + centerPoint.x;
+                    vertices[i].position.z = -sinR * (temp.x - centerPoint.x) + cosR * (temp.z - centerPoint.z) + centerPoint.z;
+                }
+            }
+
+            if (rotations.z != 0)
+            {
+                // Rotate around Z
+                float cosR = (float)Math.Cos(zRadians);
+                float sinR = (float)Math.Sin(zRadians);
+                
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    
+                    Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
+                
+                    vertices[i].position.x = cosR * (temp.x - centerPoint.x) - sinR * (temp.y - centerPoint.y) + centerPoint.x;
+                    vertices[i].position.y = sinR * (temp.x - centerPoint.x) + cosR * (temp.y - centerPoint.y) + centerPoint.y;
+                }
             }
         }
         

@@ -100,15 +100,16 @@ namespace SharpEngine
             float rDegrees = degrees * ((float)Math.PI / 180);
             float rotateRadians = rDegrees - currentRotationDegrees;
             currentRotationDegrees = rDegrees;
+
+            float cosR = (float)Math.Cos(rotateRadians);
+            float sinR = (float) Math.Sin(rotateRadians);
             
             for (int i = 0; i < vertices.Length; i++)
             {
                 Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y);
                 
-                vertices[i].position.x = (float) Math.Cos(rotateRadians) * (temp.x - centerPoint.x) -
-                    (float)Math.Sin(rotateRadians) * (temp.y - centerPoint.y) + centerPoint.x;
-                vertices[i].position.y = (float) Math.Sin(rotateRadians) * (temp.x - centerPoint.x) +
-                                         (float)Math.Cos(rotateRadians) * (temp.y - centerPoint.y) + centerPoint.y;
+                vertices[i].position.x = cosR * (temp.x - centerPoint.x) - sinR * (temp.y - centerPoint.y) + centerPoint.x;
+                vertices[i].position.y = sinR * (temp.x - centerPoint.x) + cosR * (temp.y - centerPoint.y) + centerPoint.y;
             }
         }
         

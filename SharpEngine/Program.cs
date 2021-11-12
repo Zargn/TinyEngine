@@ -10,9 +10,9 @@ namespace SharpEngine
 
         static Triangle triangle = new Triangle (
             new Vertex[] {
-                new Vertex(new Vector(0f, 0f), Color.Red),
-                new Vertex(new Vector(1f, 0f), Color.Green),
-                new Vertex(new Vector(0f, 1f), Color.Blue)
+                new Vertex(new Vector(.2f, -.07f), Color.Red),
+                new Vertex(new Vector(.4f, -.07f), Color.Green),
+                new Vertex(new Vector(.3f, .123f), Color.Blue)
             }
         );
         
@@ -51,7 +51,7 @@ namespace SharpEngine
                 
                 triangle.Scale(multiplier);
                 triangle2.Scale(multiplier);
-                
+
                 // 2. Keep track of the Scale, so we can reverse it
                 if (triangle.CurrentScale <= 0.5f) {
                     multiplier = 1.001f;
@@ -73,7 +73,7 @@ namespace SharpEngine
                     direction.y *= -1;
                 }
 
-                triangle3.Rotate(currentRotation);
+                triangle.Rotate(currentRotation);
                 currentRotation += 0.1f;
                 if (currentRotation >= 360)
                 {
@@ -113,16 +113,6 @@ namespace SharpEngine
             glUseProgram(program);
         }
 
-        // static unsafe void LoadTriangleIntoBuffer() {
-        //     var vertexArray = glGenVertexArray();
-        //     var vertexBuffer = glGenBuffer();
-        //     glBindVertexArray(vertexArray);
-        //     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        //     glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
-        //     glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
-        //     glEnableVertexAttribArray(0);
-        //     glEnableVertexAttribArray(1);
-        // }
 
         static Window CreateWindow() {
             // initialize and configure

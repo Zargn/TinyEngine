@@ -43,6 +43,8 @@ namespace SharpEngine
         static Rectangle rectangle = new Rectangle(0.8f, 0.4f, new Vector(0f, 0f, 0f));
 
         private static Circle circle = new Circle(1, 100,new Vector(-0.5f, 0, 0));
+
+        private static Cone cone = new Cone(0.25f, 25, 0.3f, new Vector(0.3f, -0.5f, 0f));
         
         static void Main(string[] args) {
             
@@ -104,6 +106,7 @@ namespace SharpEngine
             triangle2.Render();
             rectangle.Render();
             circle.Render();
+            cone.Render();
             // triangle3.Render();
             Glfw.SwapBuffers(window);
         }

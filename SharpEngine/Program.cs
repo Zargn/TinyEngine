@@ -16,11 +16,27 @@ namespace SharpEngine
             }
         );
         
+        static Triangle triangle2 = new Triangle (
+            new Vertex[] {
+                new Vertex(new Vector(0f, 0f), Color.Red),
+                new Vertex(new Vector(0.5f, 0f), Color.Green),
+                new Vertex(new Vector(0f, 0.5f), Color.Blue)
+            }
+        );
+        
+        static Triangle triangle3 = new Triangle (
+            new Vertex[] {
+                new Vertex(new Vector(0f, 0f), Color.Red),
+                new Vertex(new Vector(-0.5f, 0f), Color.Green),
+                new Vertex(new Vector(0f, -0.5f), Color.Blue)
+            }
+        );
+        
         static void Main(string[] args) {
             
             var window = CreateWindow();
 
-            LoadTriangleIntoBuffer();
+            // LoadTriangleIntoBuffer();
 
             CreateShaderProgram();
 
@@ -33,6 +49,7 @@ namespace SharpEngine
                 Render(window);
                 
                 triangle.Scale(multiplier);
+                triangle2.Scale(multiplier);
                 
                 // 2. Keep track of the Scale, so we can reverse it
                 if (triangle.CurrentScale <= 0.5f) {
@@ -60,6 +77,8 @@ namespace SharpEngine
 
         static void Render(Window window) {
             triangle.Render();
+            triangle2.Render();
+            triangle3.Render();
             Glfw.SwapBuffers(window);
         }
 
@@ -87,16 +106,16 @@ namespace SharpEngine
             glUseProgram(program);
         }
 
-        static unsafe void LoadTriangleIntoBuffer() {
-            var vertexArray = glGenVertexArray();
-            var vertexBuffer = glGenBuffer();
-            glBindVertexArray(vertexArray);
-            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-        }
+        // static unsafe void LoadTriangleIntoBuffer() {
+        //     var vertexArray = glGenVertexArray();
+        //     var vertexBuffer = glGenBuffer();
+        //     glBindVertexArray(vertexArray);
+        //     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        //     glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
+        //     glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
+        //     glEnableVertexAttribArray(0);
+        //     glEnableVertexAttribArray(1);
+        // }
 
         static Window CreateWindow() {
             // initialize and configure

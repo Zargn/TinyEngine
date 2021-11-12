@@ -1,4 +1,4 @@
-namespace Engine_Protoype
+namespace Engine_Prototype
 {
     public struct Color
     {

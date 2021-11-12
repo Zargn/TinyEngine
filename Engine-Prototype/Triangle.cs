@@ -1,8 +1,4 @@
-﻿// using System;
-// using OpenGL.Gl;
-// using GLFW;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,7 +9,7 @@ using System.Runtime.Intrinsics.X86;
 using GLFW;
 using static OpenGL.Gl;
 
-namespace Engine_Protoype
+namespace Engine_Prototype
 {
     class Triangle
     {
@@ -23,7 +19,7 @@ namespace Engine_Protoype
         }
     
         public static int NumberOfTriangles = 0;
-        
+
         private static Vertex[] globalVertices = new Vertex[3];
 
         
@@ -40,8 +36,9 @@ namespace Engine_Protoype
         
         
         private static uint nextId;
+        private static uint nextIndex;
         private uint id;
-        
+        private uint index;
         
         
         public Triangle(Vertex vertex)
@@ -58,7 +55,7 @@ namespace Engine_Protoype
             // Get the centerPoint
             Vector min = vertices[0].position;
             Vector max = vertices[0].position;
-            for (int i = 0; i < vertices.Length / 2; i++)
+            for (int i = 0; i < vertices.Length; i++)
             {
                 min = Vector.Min(min, vertices[i].position);
                 max = Vector.Max(max, vertices[i].position);
@@ -68,7 +65,9 @@ namespace Engine_Protoype
             
 
             id = nextId;
-            nextId += 2;
+            index = nextIndex;
+            nextIndex += 2;
+            nextId++;
     
             NumberOfTriangles++;
             
@@ -83,13 +82,13 @@ namespace Engine_Protoype
         {
             // glVertexAttribPointer(id, 3, GL_FLOAT, false, 3 * sizeof(float), null);
     
-            glVertexAttribPointer(id, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
+            glVertexAttribPointer(index, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
             
-            glVertexAttribPointer(id + 1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
+            glVertexAttribPointer(index + 1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
 
             
-            glEnableVertexAttribArray(id);
-            glEnableVertexAttribArray(id + 1);
+            glEnableVertexAttribArray(index);
+            glEnableVertexAttribArray(index + 1);
         }
 
         

@@ -43,6 +43,7 @@ namespace SharpEngine
             // engine rendering loop
             var direction = new Vector(0.0003f, 0.0003f);
             var multiplier = 0.999f;
+            float currentRotation = 0;
             while (!Glfw.WindowShouldClose(window)) {
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 ClearScreen();
@@ -72,6 +73,12 @@ namespace SharpEngine
                     direction.y *= -1;
                 }
 
+                triangle3.Rotate(currentRotation);
+                currentRotation += 0.1f;
+                if (currentRotation >= 360)
+                {
+                    currentRotation = 0;
+                }
             }
         }
 

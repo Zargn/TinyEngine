@@ -99,10 +99,8 @@ namespace Engine_Prototype
             {
                 Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y);
                 
-                vertices[i].position.x = (float) Math.Cos(degrees) * (temp.x - centerPoint.x) -
-                    (float)Math.Sin(degrees) * (temp.y - centerPoint.y) + centerPoint.x;
-                vertices[i].position.y = (float) Math.Sin(degrees) * (temp.x - centerPoint.x) +
-                                         (float)Math.Cos(degrees) * (temp.y - centerPoint.y) + centerPoint.y;
+                vertices[i].position.x = (float) Math.Cos(degrees) * (temp.x - centerPoint.x) - (float)Math.Sin(degrees) * (temp.y - centerPoint.y) + centerPoint.x;
+                vertices[i].position.y = (float) Math.Sin(degrees) * (temp.x - centerPoint.x) + (float)Math.Cos(degrees) * (temp.y - centerPoint.y) + centerPoint.y;
             }
         }
 
@@ -146,6 +144,8 @@ namespace Engine_Prototype
             new Vector(.1f,-.07f),
             new Vector(0f,.123f)
         };
+        
+        
 
         private Vertex[] vertices = new[]
         {

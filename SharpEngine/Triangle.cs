@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using static OpenGL.Gl;
 
@@ -6,8 +7,8 @@ namespace SharpEngine
     public class Triangle 
     {
         Vertex[] vertices;
-     
-        
+        private Vector centerPoint;
+
         public float CurrentScale { get; private set; }
             
         
@@ -15,6 +16,7 @@ namespace SharpEngine
         {
             this.vertices = vertices;
             this.CurrentScale = 1f;
+            centerPoint = GetCenter();
             LoadTriangleIntoBuffer();
         }
 
@@ -74,6 +76,8 @@ namespace SharpEngine
             for (var i = 0; i < this.vertices.Length; i++) {
                 this.vertices[i].position += direction;
             }
+
+            centerPoint += direction;
         }
 
         
@@ -84,6 +88,28 @@ namespace SharpEngine
                 glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * this.vertices.Length, vertex, GL_DYNAMIC_DRAW);
             }
             glDrawArrays(GL_TRIANGLES, 0, this.vertices.Length);
+        }
+
+
+        private float currentRotationDegrees;
+        public void Rotate(float degrees)
+        {
+            // degrees are the goal rotation.
+            // When called compare the current rotation with the goal rotation
+            // Then rotate by the difference amount.
+            float rDegrees = degrees * ((float)Math.PI / 180);
+            float rotateRadians = rDegrees - currentRotationDegrees;
+            currentRotationDegrees = rDegrees;
+            
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vector temp = new Vector(vertices[i].position.x, vertices[i].position.y);
+                
+                vertices[i].position.x = (float) Math.Cos(rotateRadians) * (temp.x - centerPoint.x) -
+                    (float)Math.Sin(rotateRadians) * (temp.y - centerPoint.y) + centerPoint.x;
+                vertices[i].position.y = (float) Math.Sin(rotateRadians) * (temp.x - centerPoint.x) +
+                                         (float)Math.Cos(rotateRadians) * (temp.y - centerPoint.y) + centerPoint.y;
+            }
         }
         
         

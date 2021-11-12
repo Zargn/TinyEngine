@@ -142,7 +142,7 @@ namespace SharpEngine
             
 
             float currentDegree = 0;
-            float degreesPerTriangle = 360 / sections;
+            float degreesPerTriangle = (float)360 / sections;
             Console.WriteLine(degreesPerTriangle);
 
             for (int i = 0; i < vertices.Length; i += 3)
@@ -152,11 +152,11 @@ namespace SharpEngine
                 for (int i2 = 0; i2 < 2; i2++)
                 {
                     float rDegrees = (currentDegree + (degreesPerTriangle * i2)) * ((float)Math.PI / 180);
-                    float rotateRadians = rDegrees - currentDegree;
+                    // float rotateRadians = rDegrees - currentDegree;
                     currentDegree = rDegrees * (float)(180/Math.PI);
                     
-                    float cosR = (float)Math.Cos(rotateRadians);
-                    float sinR = (float) Math.Sin(rotateRadians);
+                    float cosR = (float)Math.Cos(rDegrees);
+                    float sinR = (float) Math.Sin(rDegrees);
                 
                     Vector temp = new Vector(vertices[i + i2].position.x, vertices[i + i2].position.y);
                 

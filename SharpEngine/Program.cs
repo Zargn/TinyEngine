@@ -91,6 +91,7 @@ namespace SharpEngine
                 // triangle2.Rotate(90);
                 triangle.Rotate(currentRotation);
                 rectangle.Rotate(currentRotation);
+                // circle.Rotate(currentRotation);
                 currentRotation += 0.1f;
                 if (currentRotation >= 360)
                 {

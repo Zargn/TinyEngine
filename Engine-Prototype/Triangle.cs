@@ -146,7 +146,7 @@ namespace Engine_Prototype
         };
         
         
-
+        
         private Vertex[] vertices = new[]
         {
             new Vertex(new Vector(-.1f, -.07f), Color.Red),

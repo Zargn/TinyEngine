@@ -95,9 +95,9 @@ namespace SharpEngine
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
             
             
-            fixed (Vertex* vertex = &this.vertices[0]) {
-                glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * this.vertices.Length, vertex, GL_DYNAMIC_DRAW);
-            }
+            // fixed (Vertex* vertex = &this.vertices[0]) {
+            //     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * this.vertices.Length, vertex, GL_DYNAMIC_DRAW);
+            // }
             glDrawArrays(GL_TRIANGLES, 0, this.vertices.Length); // TODO: Try triangle_fan?
         }
 
@@ -180,7 +180,7 @@ namespace SharpEngine
             var vertexArray = glGenVertexArray();
             var vertexBuffer = glGenBuffer();
             glBindVertexArray(vertexArray);
-            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+            // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
             glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
             glEnableVertexAttribArray(0);

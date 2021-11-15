@@ -29,7 +29,7 @@ namespace SharpEngine
         static void Main(string[] args) {
             
             var window = new Window();
-            var material = new Material("shaders/position-color.vert", "shaders/vertex-color.frag");
+            var material = new Material("shaders/world-position-color.vert", "shaders/vertex-color.frag");
             var scene = new Scene();
             window.Load(scene);
 
@@ -61,7 +61,7 @@ namespace SharpEngine
                         multiplier = 0.999f;
                     }
                     
-                    triangle.Scale(multiplier);
+                    triangle.Scale(new Vector(multiplier,multiplier*multiplier,1));
                     triangle.Rotate(rotation);
                 
                     // 4. Check the X-Bounds of the Screen

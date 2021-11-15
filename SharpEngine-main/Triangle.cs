@@ -53,23 +53,17 @@ namespace SharpEngine {
 			return (GetMinBounds() + GetMaxBounds()) / 2;
 		}
 
-		public void Scale(float multiplier) {
-			// We first move the triangle to the center, to avoid
-			// the triangle moving around while scaling.
-			// Then, we move it back again.
-			var center = GetCenter();
-			Move(-center);
-			for (var i = 0; i < this.vertices.Length; i++) {
-				this.vertices[i].position *= multiplier;
-			}
-			Move(center);
+		public void Scale(float multiplier) 
+		{
 
-			this.CurrentScale *= multiplier;
 		}
 
-		public void Move(Vector direction) {
-			for (var i = 0; i < this.vertices.Length; i++) {
-				this.vertices[i].position += direction;
+		public void Move(Vector direction) 
+		{
+			Matrix martix = Matrix.Identity
+			for (int i = 0; i < this.vertices.Length; i++)
+			{
+				this.vertices[i].position = martix * this.vertices[i].position;
 			}
 		}
 
@@ -84,17 +78,9 @@ namespace SharpEngine {
 			glBindVertexArray(0);
 		}
 
-		public void Rotate(float rotation) {
-			var center = GetCenter();
-			Move(-center);
-			for (int i = 0; i < this.vertices.Length; i++) {
-				var currentRotation = Vector.Angle(this.vertices[i].position);
-				var distance = vertices[i].position.GetMagnitude();
-				var newX = MathF.Cos(currentRotation + rotation);
-				var newY = MathF.Sin(currentRotation + rotation);
-				vertices[i].position = new Vector(newX, newY) * distance;
-			}
-			Move(center);
+		public void Rotate(float rotation)
+		{
+
 		}
 	}
 }

@@ -33,8 +33,15 @@ namespace SharpEngine
             var scene = new Scene();
             window.Load(scene);
 
-            FillSceneWithTriangles(scene, material);
+            // FillSceneWithTriangles(scene, material);
+            var newtriangle = new Triangle(new Vertex[] {
+                new Vertex(new Vector(-.1f, 0f), Color.Red),
+                new Vertex(new Vector(.1f, 0f), Color.Green),
+                new Vertex(new Vector(0f, .133f), Color.Blue)
+            }, material);
             
+            scene.Add(newtriangle);
+
             // engine rendering loop
             var direction = new Vector(0.0003f, 0.0003f);
             var multiplier = 0.999f;
@@ -42,7 +49,8 @@ namespace SharpEngine
             while (window.IsOpen()) {
 
                 // Update Triangles
-                for (var i = 0; i < scene.triangles.Count; i++) {
+                for (var i = 0; i < scene.triangles.Count; i++) 
+                {
                     var triangle = scene.triangles[i];
                 
                     // 2. Keep track of the Scale, so we can reverse it
@@ -69,6 +77,7 @@ namespace SharpEngine
                     
                     triangle.Move(direction);
                 }
+                
                 
                 window.Render();
             }

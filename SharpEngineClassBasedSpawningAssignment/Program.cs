@@ -8,21 +8,21 @@ namespace SharpEngine
     class Program
     {
 
-        static Triangle triangle = new Triangle (
-            new Vertex[] {
-                new Vertex(new Vector(-.1f, -.07f), Color.Red),
-                new Vertex(new Vector(.1f, -.07f), Color.Green),
-                new Vertex(new Vector(.0f, .125f), Color.Blue)
-            }, new Vector(0.5f,-.2f,0f)
-        );
-        
-        static Triangle triangle2 = new Triangle (
-            new Vertex[] {
-                new Vertex(new Vector(-.1f, -.07f), Color.Red),
-                new Vertex(new Vector(.1f, -.07f), Color.Green),
-                new Vertex(new Vector(.0f, .125f), Color.Blue)
-            }, new Vector(0.5f,-.2f,0f)
-        );
+        // static Triangle triangle = new Triangle (
+        //     new Vertex[] {
+        //         new Vertex(new Vector(-.1f, -.07f), Color.Red),
+        //         new Vertex(new Vector(.1f, -.07f), Color.Green),
+        //         new Vertex(new Vector(.0f, .125f), Color.Blue)
+        //     }, new Vector(0.5f,-.2f,0f)
+        // );
+        //
+        // static Triangle triangle2 = new Triangle (
+        //     new Vertex[] {
+        //         new Vertex(new Vector(-.1f, -.07f), Color.Red),
+        //         new Vertex(new Vector(.1f, -.07f), Color.Green),
+        //         new Vertex(new Vector(.0f, .125f), Color.Blue)
+        //     }, new Vector(0.5f,-.2f,0f)
+        // );
         
         // static Shape triangle2 = new Shape (
         //     new Vertex[] {
@@ -32,19 +32,19 @@ namespace SharpEngine
         //     }
         // );
         
-        static Shape triangle3 = new Shape (
-            new Vertex[] {
-                new Vertex(new Vector(0f, 0f), Color.Red),
-                new Vertex(new Vector(-0.5f, 0f), Color.Green),
-                new Vertex(new Vector(0f, -0.5f), Color.Blue)
-            }
-        );
+        // static Shape triangle3 = new Shape (
+        //     new Vertex[] {
+        //         new Vertex(new Vector(0f, 0f), Color.Red),
+        //         new Vertex(new Vector(-0.5f, 0f), Color.Green),
+        //         new Vertex(new Vector(0f, -0.5f), Color.Blue)
+        //     }
+        // );
         
         static Rectangle rectangle = new Rectangle(0.8f, 0.4f, new Vector(0f, 0f, 0f));
 
-        private static Circle circle = new Circle(1, 100,new Vector(-0.5f, 0, 0));
-
-        private static Cone cone = new Cone(0.25f, 25, 0.3f, new Vector(0.3f, -0.5f, 0f));
+        // private static Circle circle = new Circle(1, 100,new Vector(-0.5f, 0, 0));
+        //
+        // private static Cone cone = new Cone(0.25f, 25, 0.3f, new Vector(0.3f, -0.5f, 0f));
         
         static void Main(string[] args) {
             
@@ -69,29 +69,29 @@ namespace SharpEngine
                 // triangle.Scale(multiplier);
                 // triangle2.Scale(multiplier);
 
-                // 2. Keep track of the Scale, so we can reverse it
-                if (triangle.CurrentScale <= 0.5f) {
-                    multiplier = 1.001f;
-                }
-                if (triangle.CurrentScale >= 1f) {
-                    multiplier = 0.999f;
-                }
+                // // 2. Keep track of the Scale, so we can reverse it
+                // if (triangle.CurrentScale <= 0.5f) {
+                //     multiplier = 1.001f;
+                // }
+                // if (triangle.CurrentScale >= 1f) {
+                //     multiplier = 0.999f;
+                // }
 
                 // 3. Move the Triangle by its Direction
                 // triangle.Move(direction);
                 
-                // 4. Check the X-Bounds of the Screen
-                if (triangle.GetMaxBounds().x >= 1 && direction.x > 0 || triangle.GetMinBounds().x <= -1 && direction.x < 0) {
-                    direction.x *= -1;
-                }
-                
-                // 5. Check the Y-Bounds of the Screen
-                if (triangle.GetMaxBounds().y >= 1 && direction.y > 0 || triangle.GetMinBounds().y <= -1 && direction.y < 0) {
-                    direction.y *= -1;
-                }
+                // // 4. Check the X-Bounds of the Screen
+                // if (triangle.GetMaxBounds().x >= 1 && direction.x > 0 || triangle.GetMinBounds().x <= -1 && direction.x < 0) {
+                //     direction.x *= -1;
+                // }
+                //
+                // // 5. Check the Y-Bounds of the Screen
+                // if (triangle.GetMaxBounds().y >= 1 && direction.y > 0 || triangle.GetMinBounds().y <= -1 && direction.y < 0) {
+                //     direction.y *= -1;
+                // }
 
                 // triangle2.Rotate(90);
-                triangle.Rotate(new Vector(54, 180, 45));
+                // triangle.Rotate(new Vector(54, 180, 45));
                 // rectangle.Rotate(currentRotation);
                 // // circle.Rotate(currentRotation);'
                 
@@ -103,11 +103,11 @@ namespace SharpEngine
             }
         }
         static void Render(Window window) {
-            triangle.Render();
+            // triangle.Render();
             // triangle2.Render();
-            // rectangle.Render();
+            rectangle.Render();
             // circle.Render();
-            cone.Render();
+            // cone.Render();
             // triangle3.Render();
             Glfw.SwapBuffers(window);
         }

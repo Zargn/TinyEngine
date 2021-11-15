@@ -7,6 +7,9 @@ namespace SharpEngine
     public class Shape 
     {
         protected Vertex[] vertices;
+        protected uint[] indices;
+        
+        
         protected Vector centerPoint;
 
         public float CurrentScale { get; private set; }
@@ -85,10 +88,13 @@ namespace SharpEngine
             centerPoint += direction;
         }
 
-        
-        
+
+
         public unsafe void Render() 
         {
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+            
+            
             fixed (Vertex* vertex = &this.vertices[0]) {
                 glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * this.vertices.Length, vertex, GL_DYNAMIC_DRAW);
             }
@@ -163,8 +169,14 @@ namespace SharpEngine
         
         
         
-        static unsafe void LoadShapeIntoBuffer() 
+        static unsafe void LoadShapeIntoBuffer()
         {
+            uint EBO;
+            glGenBuffers(1, &EBO);
+            
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+
             var vertexArray = glGenVertexArray();
             var vertexBuffer = glGenBuffer();
             glBindVertexArray(vertexArray);

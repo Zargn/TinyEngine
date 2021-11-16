@@ -67,5 +67,13 @@ namespace SharpEngine {
 			glDrawArrays(GL_TRIANGLES, 0, this.vertices.Length);
 			glBindVertexArray(0);
 		}
+
+		public void SetColor(Color color)
+		{
+			for (var i = 0; i < vertices.Length; i++)
+			{
+				vertices[i].color = color;
+			}
+		}
 	}
 }

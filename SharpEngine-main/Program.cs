@@ -16,7 +16,7 @@ namespace SharpEngine
         static void FillSceneWithTriangles(Scene scene, Material material) {
             var random = new Random();
             for (var i = 0; i < 10; i++) {
-                var triangle = new Triangle(new Vertex[] {
+                var triangle = new Shape(new Vertex[] {
                     new Vertex(new Vector(-.1f, 0f), Color.Red),
                     new Vertex(new Vector(.1f, 0f), Color.Green),
                     new Vertex(new Vector(0f, .133f), Color.Blue)
@@ -35,13 +35,23 @@ namespace SharpEngine
             window.Load(scene);
 
             // FillSceneWithTriangles(scene, material);
-            var newtriangle = new Triangle(new Vertex[] {
-                new Vertex(new Vector(-.1f, 0f), Color.Red),
-                new Vertex(new Vector(.1f, 0f), Color.Green),
-                new Vertex(new Vector(0f, .133f), Color.Blue)
-            }, material);
+            // var newtriangle = new Triangle(new Vertex[] {
+            //     new Vertex(new Vector(-.1f, 0f), Color.Red),
+            //     new Vertex(new Vector(.1f, 0f), Color.Green),
+            //     new Vertex(new Vector(0f, .133f), Color.Blue)
+            // }, material);
+
+            // var circle = new Circle(0.3f, 25, material);
+            // var cone = new Cone(1, 50, 1, material);
+            var rectangle = new Rectangle(0.4f, 0.4f, material);
             
-            scene.Add(newtriangle);
+            // scene.Add(newtriangle);
+            // scene.Add(circle);
+            // scene.Add(cone);
+            scene.Add(rectangle);
+            
+            // circle.Transform.Move(new Vector(0.2f,0,0));Ho
+
 
             // engine rendering loop
             var direction = new Vector(0.01f, 0.01f);
@@ -51,16 +61,20 @@ namespace SharpEngine
             const int fixedStepNumberPerSecond = 30;
             const double fixedStepDuration = 1.0 / fixedStepNumberPerSecond; 
             double previousFixedStep = 0.0;
+
+            const int FixedFramerate = 2;
+            const double FrameTime = 1.0 / FixedFramerate;
+            double NextFrameTimeTarget = 0.0;
             
             // newtriangle.Transform.Move(new Vector(0.5f,0f));
             
             while (window.IsOpen()) {
 
-                if (Glfw.Time > previousFixedStep + fixedStepDuration)
+                if (Glfw.Time > NextFrameTimeTarget)
                 {
-                    previousFixedStep = Glfw.Time;
-                    
+                    NextFrameTimeTarget += FrameTime;
                     Console.WriteLine(Glfw.Time);
+                    
                     // Update Triangles
                     for (var i = 0; i < scene.triangles.Count; i++) 
                     {
@@ -93,6 +107,16 @@ namespace SharpEngine
                 
                 
                     window.Render();
+                }
+                
+                // TODO ------------------------------------------------------------------------------------------------
+                // Macs framerate locker. 
+                if (Glfw.Time > previousFixedStep + fixedStepDuration)
+                {
+                    previousFixedStep = Glfw.Time;
+                    
+                    // Console.WriteLine(Glfw.Time);
+
                 }
             }
         }

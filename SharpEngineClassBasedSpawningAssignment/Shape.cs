@@ -92,12 +92,12 @@ namespace SharpEngine
 
         public unsafe void Render() 
         {
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+            // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
             
             
-            // fixed (Vertex* vertex = &this.vertices[0]) {
-            //     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * this.vertices.Length, vertex, GL_DYNAMIC_DRAW);
-            // }
+            fixed (Vertex* vertex = &this.vertices[0]) {
+                glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * this.vertices.Length, vertex, GL_DYNAMIC_DRAW);
+            }
             glDrawArrays(GL_TRIANGLES, 0, this.vertices.Length); // TODO: Try triangle_fan?
         }
 
@@ -171,10 +171,10 @@ namespace SharpEngine
         
         static unsafe void LoadShapeIntoBuffer()
         {
-            uint EBO;
-            glGenBuffers(1, &EBO);
-            
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+            // uint EBO;
+            // glGenBuffers(1, &EBO);
+            //
+            // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 
             var vertexArray = glGenVertexArray();

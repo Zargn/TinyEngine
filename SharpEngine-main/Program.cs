@@ -17,9 +17,9 @@ namespace SharpEngine
             var random = new Random();
             for (var i = 0; i < 10; i++) {
                 var triangle = new Shape(new Vertex[] {
-                    new Vertex(new Vector(-.1f, 0f), Color.Red),
-                    new Vertex(new Vector(.1f, 0f), Color.Green),
-                    new Vertex(new Vector(0f, .133f), Color.Blue)
+                    new Vertex(new Vector(-.1f, 0f), Color.Blue),
+                    new Vertex(new Vector(.1f, 0f), Color.Blue),
+                    new Vertex(new Vector(0f, .133f), Color.Red)
                 }, material);
                 triangle.Transform.Rotate(new Vector(0,0,GetRandomFloat(random)));
                 triangle.Transform.Move(new Vector(GetRandomFloat(random, -1, 1), GetRandomFloat(random, -1, 1)));
@@ -35,38 +35,42 @@ namespace SharpEngine
             window.Load(scene);
 
             // FillSceneWithTriangles(scene, material);
-            // var newtriangle = new Triangle(new Vertex[] {
-            //     new Vertex(new Vector(-.1f, 0f), Color.Red),
-            //     new Vertex(new Vector(.1f, 0f), Color.Green),
-            //     new Vertex(new Vector(0f, .133f), Color.Blue)
-            // }, material);
+            var newtriangle = new Triangle(new Vertex[] {
+                new Vertex(new Vector(-.05f, -.05f), Color.Blue),
+                new Vertex(new Vector(.05f, -.05f), Color.Blue),
+                new Vertex(new Vector(0f, .08f), Color.Red)
+            }, material);
+            
+            newtriangle.Transform.Scale(new Vector(1, 1, 1));
 
-            // var circle = new Circle(0.3f, 25, material);
-            // var cone = new Cone(1, 50, 1, material);
+            var circle = new Circle(0.3f, 25, material);
+            var cone = new Cone(1, 50, 1, material);
             var rectangle = new Rectangle(0.4f, 0.4f, material);
             
-            // scene.Add(newtriangle);
+            scene.Add(newtriangle);
             // scene.Add(circle);
             // scene.Add(cone);
-            scene.Add(rectangle);
+            // scene.Add(rectangle);
             
             // circle.Transform.Move(new Vector(0.2f,0,0));Ho
 
 
+            var ground = new Rectangle(2f, 0.1f, material);
+            ground.Transform.Move(new Vector(0,-0.95f,0));
+            scene.Add(ground);
+            
+
             // engine rendering loop
             var direction = new Vector(0.01f, 0.01f);
             var multiplier = 0.95f;
-            var rotation = 0.05f;
+            // var rotation = 0.05f;
 
-            const int fixedStepNumberPerSecond = 30;
-            const double fixedStepDuration = 1.0 / fixedStepNumberPerSecond; 
-            double previousFixedStep = 0.0;
-
-            const int FixedFramerate = 2;
+            const int FixedFramerate = 30;
             const double FrameTime = 1.0 / FixedFramerate;
             double NextFrameTimeTarget = 0.0;
+
+            float movementSpeed = 0.5f;
             
-            // newtriangle.Transform.Move(new Vector(0.5f,0f));
             
             while (window.IsOpen()) {
 
@@ -74,49 +78,44 @@ namespace SharpEngine
                 {
                     NextFrameTimeTarget += FrameTime;
                     Console.WriteLine(Glfw.Time);
-                    
-                    // Update Triangles
-                    for (var i = 0; i < scene.triangles.Count; i++) 
+                    var walkDirection = new Vector();
+
+                    if (window.GetKey(Keys.W))
                     {
-                        var triangle = scene.triangles[i];
-                
-                        // 2. Keep track of the Scale, so we can reverse it
-                        if (triangle.Transform.CurrentScale.x <= 0.5f) {
-                            multiplier = 1.05f;
-                        }
-                        if (triangle.Transform.CurrentScale.x >= 1f) {
-                            multiplier = 0.95f;
-                        }
-                    
-                        triangle.Transform.Scale(new Vector(multiplier,multiplier,1));
-                        triangle.Transform.Rotate(new Vector(0,0,rotation));
-                    
-                    
-                        // 4. Check the X-Bounds of the Screen
-                        if (triangle.GetMaxBounds().x >= 1 && direction.x > 0 || triangle.GetMinBounds().x <= -1 && direction.x < 0) {
-                            direction.x *= -1;
-                        }
-                
-                        // 5. Check the Y-Bounds of the Screen
-                        if (triangle.GetMaxBounds().y >= 1 && direction.y > 0 || triangle.GetMinBounds().y <= -1 && direction.y < 0) {
-                            direction.y *= -1;
-                        }
-
-                        triangle.Transform.Move(direction);
+                        walkDirection += newtriangle.Transform.Forward;
                     }
-                
-                
-                    window.Render();
-                }
-                
-                // TODO ------------------------------------------------------------------------------------------------
-                // Macs framerate locker. 
-                if (Glfw.Time > previousFixedStep + fixedStepDuration)
-                {
-                    previousFixedStep = Glfw.Time;
-                    
-                    // Console.WriteLine(Glfw.Time);
+                    if (window.GetKey(Keys.S))
+                    {
+                        walkDirection +=newtriangle.Transform.Backward;
+                    }
+                    if (window.GetKey(Keys.Q))
+                    {
+                        walkDirection += newtriangle.Transform.Left;
+                    }
+                    if (window.GetKey(Keys.E))
+                    {
+                        walkDirection += newtriangle.Transform.Right;
+                    }
+                    if (window.GetKey(Keys.A))
+                    {
+                        var rotation = newtriangle.Transform.Rotation;
+                        rotation.z += 2 * MathF.PI * (float)FrameTime;
+                        newtriangle.Transform.Rotation = rotation;
+                    }
+                    if (window.GetKey(Keys.D))
+                    {
+                        var rotation = newtriangle.Transform.Rotation;
+                        rotation.z -= 2 * MathF.PI * (float)FrameTime;
+                        newtriangle.Transform.Rotation = rotation;
+                    }
 
+                    
+
+                    walkDirection = walkDirection.Normalize();
+
+                    newtriangle.Transform.Position += walkDirection * movementSpeed * (float)FrameTime;
+                    
+                    window.Render();
                 }
             }
         }

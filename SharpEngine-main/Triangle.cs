@@ -1,16 +1,18 @@
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Transactions;
+using System.Xml.Xsl;
 using static OpenGL.Gl;
 
 namespace SharpEngine {
 	public class Triangle {
             
 		Vertex[] vertices;
-		Matrix transform = Matrix.Identity;
 		uint vertexArray;
 		uint vertexBuffer;
 
-		public float CurrentScale { get; private set; }
+		public Transform Transform { get; }
 
 		public Material material;
             
@@ -18,7 +20,7 @@ namespace SharpEngine {
 			this.vertices = vertices;
 			this.material = material;
 			LoadTriangleIntoBuffer();
-			this.CurrentScale = 1f;
+			this.Transform = new Transform();
 		}
 		
 		 unsafe void LoadTriangleIntoBuffer() {
@@ -34,39 +36,30 @@ namespace SharpEngine {
 		}
 
 		public Vector GetMinBounds() {
-			var min = this.vertices[0].position;
+			var min = Transform.Matrix * this.vertices[0].position;
 			for (var i = 1; i < this.vertices.Length; i++) {
-				min = Vector.Min(min, this.vertices[i].position);
+				min = Vector.Min(min, this.Transform.Matrix * vertices[i].position);
 			}
 			return min;
 		}
             
 		public Vector GetMaxBounds() {
-			var max = this.vertices[0].position;
+			var max = Transform.Matrix * this.vertices[0].position;
 			for (var i = 1; i < this.vertices.Length; i++) {
-				max = Vector.Max(max, this.vertices[i].position);
+				// max = Vector.Max(max, this.vertices[i].position);
+				max = Vector.Max(max, Transform.Matrix * vertices[i].position);
 			}
-
 			return max;
 		}
 
 		public Vector GetCenter() {
 			return (GetMinBounds() + GetMaxBounds()) / 2;
 		}
-
-		public void Scale(Vector multiplier)
-		{
-			
-		}
-
-		public void Move(Vector direction)
-		{
-			this.transform *= Matrix.Translation(direction);
-		}
+		
 
 		public unsafe void Render() {
 			this.material.Use();
-			this.material.SetTransform(this.transform);
+			this.material.SetTransform(this.Transform.Matrix);
 			glBindVertexArray(vertexArray);
 			glBindBuffer(GL_ARRAY_BUFFER, this.vertexBuffer);
 			fixed (Vertex* vertex = &this.vertices[0]) {
@@ -76,9 +69,9 @@ namespace SharpEngine {
 			glBindVertexArray(0);
 		}
 
-		public void Rotate(float rotation)
-		{
-
-		}
+		// public void Rotate(float rotation)
+		// {
+		// 	this.transform *= Matrix.RotateZ(rotation);
+		// }
 	}
 }

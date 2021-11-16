@@ -1,4 +1,6 @@
-﻿namespace SharpEngine
+﻿using System;
+
+namespace SharpEngine
 {
     public struct Matrix
     {
@@ -57,6 +59,44 @@
             result.m24 = translation.y;
             result.m34 = translation.z;
             return result;
+        }
+
+        public static Matrix RotateZ(float z)
+        {
+            var cos = (float)Math.Cos(z);
+            var sin = (float)Math.Sin(z);
+
+            var result = Identity;
+            result.m11 = cos;
+            result.m12 = -sin;
+            result.m21 = sin;
+            result.m22 = cos;
+            return result;
+        }
+
+        public static Matrix RotationX(float x)
+        {
+            var result = Identity;
+            result.m22 = MathF.Cos(x);
+            result.m23 = -MathF.Sin(x);
+            result.m32 = MathF.Sin(x);
+            result.m33 = MathF.Cos(x);
+            return result;
+        }
+        
+        public static Matrix RotationY(float y)
+        {
+            var result = Identity;
+            result.m11 = MathF.Cos(y);
+            result.m12 = -MathF.Sin(y);
+            result.m13 = MathF.Sin(y);
+            result.m33 = MathF.Cos(y);
+            return result;
+        }
+
+        public static Matrix Rotation(Vector rotation)
+        {
+            return RotateZ(rotation.z) * RotationY(rotation.y) * RotationX(rotation.x);
         }
 
         public static Matrix Scale(Vector vector)

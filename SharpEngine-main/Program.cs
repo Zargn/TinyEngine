@@ -20,8 +20,8 @@ namespace SharpEngine
                     new Vertex(new Vector(.1f, 0f), Color.Green),
                     new Vertex(new Vector(0f, .133f), Color.Blue)
                 }, material);
-                triangle.Rotate(GetRandomFloat(random));
-                triangle.Move(new Vector(GetRandomFloat(random, -1, 1), GetRandomFloat(random, -1, 1)));
+                triangle.Transform.Rotate(new Vector(0,0,GetRandomFloat(random)));
+                triangle.Transform.Move(new Vector(GetRandomFloat(random, -1, 1), GetRandomFloat(random, -1, 1)));
                 scene.Add(triangle);
             }
         }
@@ -46,6 +46,9 @@ namespace SharpEngine
             var direction = new Vector(0.0003f, 0.0003f);
             var multiplier = 0.999f;
             var rotation = 0.0005f;
+            
+            newtriangle.Transform.Move(new Vector(0.5f,0f));
+            
             while (window.IsOpen()) {
 
                 // Update Triangles
@@ -54,16 +57,17 @@ namespace SharpEngine
                     var triangle = scene.triangles[i];
                 
                     // 2. Keep track of the Scale, so we can reverse it
-                    if (triangle.CurrentScale <= 0.5f) {
+                    if (triangle.Transform.CurrentScale.x <= 0.5f) {
                         multiplier = 1.001f;
                     }
-                    if (triangle.CurrentScale >= 1f) {
+                    if (triangle.Transform.CurrentScale.x >= 1f) {
                         multiplier = 0.999f;
                     }
                     
-                    triangle.Scale(new Vector(multiplier,multiplier*multiplier,1));
-                    triangle.Rotate(rotation);
-                
+                    triangle.Transform.Scale(new Vector(multiplier,multiplier,1));
+                    triangle.Transform.Rotate(new Vector(0,0,rotation));
+                    
+                    
                     // 4. Check the X-Bounds of the Screen
                     if (triangle.GetMaxBounds().x >= 1 && direction.x > 0 || triangle.GetMinBounds().x <= -1 && direction.x < 0) {
                         direction.x *= -1;
@@ -73,9 +77,8 @@ namespace SharpEngine
                     if (triangle.GetMaxBounds().y >= 1 && direction.y > 0 || triangle.GetMinBounds().y <= -1 && direction.y < 0) {
                         direction.y *= -1;
                     }
-                    
-                    
-                    triangle.Move(direction);
+
+                    triangle.Transform.Move(direction);
                 }
                 
                 

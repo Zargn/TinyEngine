@@ -44,13 +44,18 @@ namespace SharpEngine
             newtriangle.Transform.Scale(new Vector(1, 1, 1));
 
             var circle = new Circle(0.3f, 25, material);
+            circle.Transform.Move(new Vector(0.5f,0,0));
+            
             var cone = new Cone(1, 50, 1, material);
-            var rectangle = new Rectangle(0.4f, 0.4f, material);
+            
+            var rectangle = new Rectangle(0.2f, 0.2f, material);
+            rectangle.Transform.Move(new Vector(0,-.5f,0));
+            
             
             scene.Add(newtriangle);
-            // scene.Add(circle);
+            scene.Add(circle);
             // scene.Add(cone);
-            // scene.Add(rectangle);
+            scene.Add(rectangle);
             
             // circle.Transform.Move(new Vector(0.2f,0,0));Ho
 
@@ -77,7 +82,9 @@ namespace SharpEngine
                 if (Glfw.Time > NextFrameTimeTarget)
                 {
                     NextFrameTimeTarget += FrameTime;
-                    Console.WriteLine(Glfw.Time);
+                    // Console.WriteLine(Glfw.Time);
+                    
+                    
                     var walkDirection = new Vector();
 
                     if (window.GetKey(Keys.W))
@@ -108,9 +115,22 @@ namespace SharpEngine
                         rotation.z -= 2 * MathF.PI * (float)FrameTime;
                         newtriangle.Transform.Rotation = rotation;
                     }
-
                     
-
+                    # region The Scared Rectangle
+                    if (Vector.Dot(newtriangle.Transform.Forward, rectangle.Transform.Forward) < 0)
+                    {
+                        rectangle.SetColor(Color.Green);
+                    }
+                    else
+                    {
+                        rectangle.SetColor(Color.Red);
+                    }
+                    #endregion
+                    
+                    # region The Spooky light
+                    
+                    #endregion
+                    
                     walkDirection = walkDirection.Normalize();
 
                     newtriangle.Transform.Position += walkDirection * movementSpeed * (float)FrameTime;

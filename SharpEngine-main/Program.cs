@@ -87,58 +87,73 @@ namespace SharpEngine
                     // Console.WriteLine(Glfw.Time);
                     
                     
-                    var walkDirection = new Vector();
-
-                    if (window.GetKey(Keys.W))
-                    {
-                        walkDirection += newtriangle.Transform.Forward;
-                    }
-                    if (window.GetKey(Keys.S))
-                    {
-                        walkDirection +=newtriangle.Transform.Backward;
-                    }
-                    if (window.GetKey(Keys.Q))
-                    {
-                        walkDirection += newtriangle.Transform.Left;
-                    }
-                    if (window.GetKey(Keys.E))
-                    {
-                        walkDirection += newtriangle.Transform.Right;
-                    }
-                    if (window.GetKey(Keys.A))
-                    {
-                        var rotation = newtriangle.Transform.Rotation;
-                        rotation.z += 2 * MathF.PI * (float)FrameTime;
-                        newtriangle.Transform.Rotation = rotation;
-                    }
-                    if (window.GetKey(Keys.D))
-                    {
-                        var rotation = newtriangle.Transform.Rotation;
-                        rotation.z -= 2 * MathF.PI * (float)FrameTime;
-                        newtriangle.Transform.Rotation = rotation;
-                    }
-                    
-                    # region The Scared Rectangle
-
-                    rectangle.SetColor(Vector.Dot(newtriangle.Transform.Forward, rectangle.GetCenter()) < 0 ?
-                        Color.Green : Color.Red
-                        );
-
-                    #endregion
-                    
-                    
-                    // Scale the color of the circle with the angle between the triangles forward and the circles position.
-                    circle.SetColor(new Color(MaxColorRange - Vector.GetAngleTo(newtriangle.Transform.Position - circle.Transform.Position, newtriangle.Transform.Forward) * (float)piColorRelation));
-
-
-
-                    walkDirection = walkDirection.Normalize();
-
-                    newtriangle.Transform.Position += walkDirection * movementSpeed * (float)FrameTime;
-                    
                     window.Render();
                 }
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//                     var walkDirection = new Vector();
+//
+//                     if (window.GetKey(Keys.W))
+//                     {
+//                         walkDirection += newtriangle.Transform.Forward;
+//                     }
+//                     if (window.GetKey(Keys.S))
+//                     {
+//                         walkDirection +=newtriangle.Transform.Backward;
+//                     }
+//                     if (window.GetKey(Keys.Q))
+//                     {
+//                         walkDirection += newtriangle.Transform.Left;
+//                     }
+//                     if (window.GetKey(Keys.E))
+//                     {
+//                         walkDirection += newtriangle.Transform.Right;
+//                     }
+//                     if (window.GetKey(Keys.A))
+//                     {
+//                         var rotation = newtriangle.Transform.Rotation;
+//                         rotation.z += 2 * MathF.PI * (float)FrameTime;
+//                         newtriangle.Transform.Rotation = rotation;
+//                     }
+//                     if (window.GetKey(Keys.D))
+//                     {
+//                         var rotation = newtriangle.Transform.Rotation;
+//                         rotation.z -= 2 * MathF.PI * (float)FrameTime;
+//                         newtriangle.Transform.Rotation = rotation;
+//                     }
+//                     
+//                     # region The Scared Rectangle
+//
+//                     rectangle.SetColor(Vector.Dot(newtriangle.Transform.Forward, rectangle.GetCenter()) < 0 ?
+//                         Color.Green : Color.Red
+//                         );
+//
+//                     #endregion
+//                     
+//                     
+//                     // Scale the color of the circle with the angle between the triangles forward and the circles position.
+//                     circle.SetColor(new Color(MaxColorRange - Vector.GetAngleTo(newtriangle.Transform.Position - circle.Transform.Position, newtriangle.Transform.Forward) * (float)piColorRelation));
+//
+//
+//
+//                     walkDirection = walkDirection.Normalize();
+//
+//                     newtriangle.Transform.Position += walkDirection * movementSpeed * (float)FrameTime;
+//                     

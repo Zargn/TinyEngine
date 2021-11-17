@@ -12,9 +12,9 @@ namespace SharpEngine {
 		uint vertexBuffer;
 
 		public Transform Transform { get; }
-
 		public Material material;
-            
+		public Vector velocity;    
+		
 		public Shape(Vertex[] vertices, Material material) {
 			this.vertices = vertices;
 			this.material = material;

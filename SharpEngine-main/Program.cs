@@ -44,7 +44,7 @@ namespace SharpEngine
             newtriangle.Transform.Scale(new Vector(1, 1, 1));
 
             var circle = new Circle(0.3f, 25, material);
-            circle.Transform.Move(new Vector(0.5f,0,0));
+            circle.Transform.Move(new Vector(.5f,-.5f,0f));
             
             var cone = new Cone(1, 50, 1, material);
             
@@ -128,8 +128,13 @@ namespace SharpEngine
                     #endregion
                     
                     # region The Spooky light
+                    double piColorRelation = 1 / Math.PI;
+                    float circleColor = 1 - MathF.Acos(Vector.Dot((newtriangle.Transform.Position - circle.Transform.Position).Normalize(), newtriangle.Transform.Forward.Normalize())) * (float)piColorRelation;
+                    circle.SetColor(new Color(circleColor, circleColor, circleColor, circleColor));
                     
                     #endregion
+                    
+                    
                     
                     walkDirection = walkDirection.Normalize();
 

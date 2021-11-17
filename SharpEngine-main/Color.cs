@@ -1,3 +1,5 @@
+using System;
+
 namespace SharpEngine {
 	public struct Color {
 
@@ -12,6 +14,14 @@ namespace SharpEngine {
 			this.g = g;
 			this.b = b;
 			this.a = a;
+		}
+
+		public Color(float color)
+		{
+			this.r = color;
+			this.g = color;
+			this.b = color;
+			this.a = color;
 		}
 	}
 }

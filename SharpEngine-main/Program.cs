@@ -70,6 +70,8 @@ namespace SharpEngine
             var multiplier = 0.95f;
             // var rotation = 0.05f;
 
+            const float MaxColorRange = 1;
+            const double piColorRelation = MaxColorRange / Math.PI;
             const int FixedFramerate = 30;
             const double FrameTime = 1.0 / FixedFramerate;
             double NextFrameTimeTarget = 0.0;
@@ -117,25 +119,19 @@ namespace SharpEngine
                     }
                     
                     # region The Scared Rectangle
-                    if (Vector.Dot(newtriangle.Transform.Forward, rectangle.Transform.Forward) < 0)
-                    {
-                        rectangle.SetColor(Color.Green);
-                    }
-                    else
-                    {
-                        rectangle.SetColor(Color.Red);
-                    }
-                    #endregion
-                    
-                    # region The Spooky light
-                    double piColorRelation = 1 / Math.PI;
-                    float circleColor = 1 - MathF.Acos(Vector.Dot((newtriangle.Transform.Position - circle.Transform.Position).Normalize(), newtriangle.Transform.Forward.Normalize())) * (float)piColorRelation;
-                    circle.SetColor(new Color(circleColor, circleColor, circleColor, circleColor));
-                    
+
+                    rectangle.SetColor(Vector.Dot(newtriangle.Transform.Forward, rectangle.GetCenter()) < 0 ?
+                        Color.Green : Color.Red
+                        );
+
                     #endregion
                     
                     
-                    
+                    // Scale the color of the circle with the angle between the triangles forward and the circles position.
+                    circle.SetColor(new Color(MaxColorRange - Vector.GetAngleTo(newtriangle.Transform.Position - circle.Transform.Position, newtriangle.Transform.Forward) * (float)piColorRelation));
+
+
+
                     walkDirection = walkDirection.Normalize();
 
                     newtriangle.Transform.Position += walkDirection * movementSpeed * (float)FrameTime;

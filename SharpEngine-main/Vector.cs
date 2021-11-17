@@ -69,5 +69,10 @@ namespace SharpEngine {
 		{
 			return (float) ((double)a.x * (double)b.x + (double)a.y * (double)b.y + (double)a.z * (double)b.z);
 		}
+
+		public static float GetAngleTo(Vector a, Vector b)
+		{
+			return MathF.Acos(Dot(a.Normalize(), b.Normalize()));
+		}
 	}
 }

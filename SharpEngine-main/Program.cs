@@ -29,41 +29,66 @@ namespace SharpEngine
         
         static void Main(string[] args) {
             
+            var random = new Random();
             var window = new Window();
             var material = new Material("shaders/world-position-color.vert", "shaders/vertex-color.frag");
             var scene = new Scene();
+            var physics = new Physics(scene);
             window.Load(scene);
 
             // FillSceneWithTriangles(scene, material);
-            var newtriangle = new Triangle(new Vertex[] {
-                new Vertex(new Vector(-.05f, -.05f), Color.Blue),
-                new Vertex(new Vector(.05f, -.05f), Color.Blue),
-                new Vertex(new Vector(0f, .08f), Color.Red)
-            }, material);
+            // var newtriangle = new Triangle(new Vertex[] {
+            //     new Vertex(new Vector(-.05f, -.05f), Color.Blue),
+            //     new Vertex(new Vector(.05f, -.05f), Color.Blue),
+            //     new Vertex(new Vector(0f, .08f), Color.Red)
+            // }, material);
             
-            newtriangle.Transform.Scale(new Vector(1, 1, 1));
+            // newtriangle.Transform.Scale(new Vector(1, 1, 1));
 
-            var circle = new Circle(0.3f, 25, material);
-            circle.Transform.Move(new Vector(.5f,-.5f,0f));
+            // var circle = new Circle(0.3f, 25, material);
+            // circle.Transform.Move(Vector.Left);
+            // circle.velocity = Vector.Right * 0.3f;
+            //
+            // var circle2 = new Circle(0.3f, 25, material);
+            // circle2.Transform.Move(Vector.Right * 0.5f);
             
-            var cone = new Cone(1, 50, 1, material);
             
-            var rectangle = new Rectangle(0.2f, 0.2f, material);
-            rectangle.Transform.Move(new Vector(0,-.5f,0));
+            for (var i = 0; i < 30; i++) {
+                var radius = GetRandomFloat(random, 0.05f, 0.15f);
+                var circle = new Circle(radius * 2, 25, material);
+                // circle.Transform.CurrentScale = new Vector(radius, radius, 1f);
+                circle.Transform.Position = new Vector(GetRandomFloat(random, -1f), GetRandomFloat(random, -1), 0f);
+                circle.velocity = -circle.Transform.Position.Normalize() * GetRandomFloat(random, 0.15f, 0.3f);
+                circle.Mass = MathF.PI * radius * radius;
+                scene.Add(circle);
+            }
+
+            // var square = new Rectangle(0.2f, 0.2f, material);
+            // square.Transform.Move(Vector.Left + Vector.Backward * 0.3f);
+            // square.Mass = 4f;
+            // square.linearForce = Vector.Right * 0.3f;
+            
+            // var cone = new Cone(1, 50, 1, material);
+            
+            // var rectangle = new Rectangle(0.2f, 0.2f, material);
+            // rectangle.Transform.Move(new Vector(0,-.5f,0));
             
             
-            scene.Add(newtriangle);
-            scene.Add(circle);
+            // scene.Add(newtriangle);
+            // scene.Add(circle);
+            // scene.Add(circle2);
             // scene.Add(cone);
-            scene.Add(rectangle);
+            // scene.Add(rectangle);
             
             // circle.Transform.Move(new Vector(0.2f,0,0));Ho
 
 
-            var ground = new Rectangle(2f, 0.1f, material);
-            ground.Transform.Move(new Vector(0,-0.95f,0));
-            scene.Add(ground);
-            
+            // var ground = new Rectangle(2f, 0.1f, material);
+            // ground.Transform.Move(new Vector(0,-0.95f,0));
+            // // ground.Mass = float.PositiveInfinity;
+            // ground.gravityScale = 0f;
+            // scene.Add(ground);
+            //
 
             // engine rendering loop
             var direction = new Vector(0.01f, 0.01f);
@@ -73,7 +98,7 @@ namespace SharpEngine
             const float MaxColorRange = 1;
             const double piColorRelation = MaxColorRange / Math.PI;
             const int FixedFramerate = 30;
-            const double FrameTime = 1.0 / FixedFramerate;
+            const float FrameTime = 1.0f / FixedFramerate;
             double NextFrameTimeTarget = 0.0;
 
             float movementSpeed = 0.5f;
@@ -86,6 +111,7 @@ namespace SharpEngine
                     NextFrameTimeTarget += FrameTime;
                     // Console.WriteLine(Glfw.Time);
                     
+                    physics.Update(FrameTime);
                     
                     window.Render();
                 }

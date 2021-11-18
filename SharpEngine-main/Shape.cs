@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Transactions;
 using System.Xml.Xsl;
@@ -11,9 +12,28 @@ namespace SharpEngine {
 		uint vertexArray;
 		uint vertexBuffer;
 
+		private float mass;
+		private float massInverse;
+
+		public float Mass
+		{
+			get => this.mass;
+			set
+			{
+				this.mass = value;
+				this.massInverse = float.IsPositiveInfinity(value) ? 0f : 1f / value;
+			}
+		}
+
+		public float MassInverse => massInverse;
+		
 		public Transform Transform { get; }
 		public Material material;
-		public Vector velocity;    
+		public Vector velocity;
+		// public Vector acceleration;
+		public Vector linearForce;
+		// public float mass = 1f;
+		public float gravityScale = 1f;
 		
 		public Shape(Vertex[] vertices, Material material) {
 			this.vertices = vertices;

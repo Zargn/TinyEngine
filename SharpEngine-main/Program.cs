@@ -54,7 +54,7 @@ namespace SharpEngine
             
             
             for (var i = 0; i < 30; i++) {
-                var radius = GetRandomFloat(random, 0.05f, 0.15f);
+                var radius = GetRandomFloat(random, 0.03f, 0.08f);
                 var circle = new Circle(radius * 2, 25, material);
                 // circle.Transform.CurrentScale = new Vector(radius, radius, 1f);
                 circle.Transform.Position = new Vector(GetRandomFloat(random, -1f), GetRandomFloat(random, -1), 0f);
